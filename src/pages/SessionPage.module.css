@@ -1,0 +1,40 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.planTitle {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.counter {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text2);
+  min-width: 40px;
+  text-align: right;
+}
+
+.progressBar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.exercises { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+
+.finishBtn { margin-top: 8px; }

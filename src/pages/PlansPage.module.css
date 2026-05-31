@@ -1,0 +1,17 @@
+.list { display: flex; flex-direction: column; gap: 10px; }
+
+.planCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: default;
+}
+
+.planInfo {
+  flex: 1;
+  cursor: pointer;
+}
+.planName { font-weight: 700; font-size: 16px; margin-bottom: 2px; }
+
+.planActions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }

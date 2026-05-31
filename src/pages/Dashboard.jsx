@@ -1,0 +1,102 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getPlans, getSessions } from '../services/api.js'
+import { getOfflineQueue } from '../services/storage.js'
+import styles from './Dashboard.module.css'
+
+export default function Dashboard() {
+  const navigate = useNavigate()
+  const [plans, setPlans] = useState([])
+  const [sessions, setSessions] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const offlineCount = getOfflineQueue().length
+
+  useEffect(() => {
+    Promise.all([getPlans(), getSessions(5)])
+      .then(([p, s]) => { setPlans(p); setSessions(s) })
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false))
+  }, [])
+
+  function formatDate(iso) {
+    if (!iso) return ''
+    const d = new Date(iso)
+    return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  }
+
+  if (loading) return <div className="page"><div className="spinner" /></div>
+
+  return (
+    <div className="page">
+      <div className={styles.greeting}>
+        <div>
+          <h1 className={styles.title}>Guten Training! 💪</h1>
+          <p className="text-muted text-sm">{new Date().toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+        </div>
+        <button className="btn btn-ghost" onClick={() => navigate('/settings')}>⚙️</button>
+      </div>
+
+      {error && <div className="error-msg">{error}</div>}
+
+      {offlineCount > 0 && (
+        <div className={styles.offlineBanner}>
+          ⏳ {offlineCount} Training{offlineCount > 1 ? 's' : ''} warten auf Synchronisierung
+        </div>
+      )}
+
+      <section className="mb-4">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className={styles.section}>Trainingspläne</h2>
+          <button className="btn btn-ghost btn-sm" onClick={() => navigate('/plans')}>Alle →</button>
+        </div>
+        {plans.length === 0 ? (
+          <div className="card text-center">
+            <p className="text-muted text-sm mb-3">Noch kein Plan angelegt.</p>
+            <button className="btn btn-primary btn-sm" onClick={() => navigate('/plans')}>Plan erstellen</button>
+          </div>
+        ) : (
+          <div className={styles.planGrid}>
+            {plans.slice(0, 4).map(plan => (
+              <button
+                key={plan.id}
+                className={styles.planBtn}
+                onClick={() => navigate(`/session/${plan.id}`, { state: { plan } })}
+              >
+                <span className={styles.planIcon}>🏋️</span>
+                <span className={styles.planName}>{plan.name}</span>
+                <span className={styles.startLabel}>Starten →</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className={styles.section}>Letztes Training</h2>
+          <button className="btn btn-ghost btn-sm" onClick={() => navigate('/history')}>Alle →</button>
+        </div>
+        {sessions.length === 0 ? (
+          <div className="card">
+            <p className="text-muted text-sm">Noch kein Training aufgezeichnet.</p>
+          </div>
+        ) : (
+          <div className={styles.sessionList}>
+            {sessions.slice(0, 3).map(s => (
+              <div key={s.id} className={`card ${styles.sessionCard}`}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className={styles.sessionPlan}>{s.plan_name || 'Training'}</div>
+                    <div className="text-xs text-muted">{formatDate(s.date)}</div>
+                  </div>
+                  <span className="badge">✓</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  )
+}

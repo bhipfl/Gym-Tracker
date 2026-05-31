@@ -1,0 +1,42 @@
+.picker { margin-bottom: 16px; }
+
+.pickerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.pickerHeader h3 { font-size: 15px; font-weight: 700; }
+
+.search { margin-bottom: 8px; }
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 8px;
+}
+
+.resultItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  color: var(--text);
+  transition: all 0.15s;
+}
+.resultItem:hover { border-color: var(--accent); }
+
+.addNew {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  margin-top: 8px;
+}
+
+.muscleInput { margin-top: 0; }

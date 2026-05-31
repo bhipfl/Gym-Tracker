@@ -1,0 +1,39 @@
+.exercise { padding: 14px; }
+
+.exHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.exName { font-weight: 700; font-size: 16px; }
+
+.exProgress {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text2);
+}
+.done { color: var(--success) !important; }
+
+.labels {
+  display: grid;
+  grid-template-columns: 36px 1fr 1fr 36px;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  color: var(--text2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 0 2px;
+}
+
+.sets { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+
+.setActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 2px;
+}

@@ -1,0 +1,46 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+.main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-h);
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: stretch;
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.navItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text2);
+  transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navItem:hover, .navItem.active {
+  color: var(--accent);
+}
+
+.navIcon { font-size: 20px; }
+.navLabel { font-size: 10px; font-weight: 600; }

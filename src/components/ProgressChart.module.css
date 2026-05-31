@@ -1,0 +1,22 @@
+.wrap { width: 100%; }
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
