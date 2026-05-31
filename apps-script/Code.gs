@@ -210,20 +210,52 @@ function doPost(e) {
           sessionId, body.plan_id || '', body.plan_name || '',
           body.date || new Date().toISOString(), body.notes || '', true
         ])
-        const sets = body.sets || []
-        sets.forEach(s => {
-          setSheet.appendRow([
-            generateId(), sessionId, s.exercise_id || '', s.exercise_name || '',
-            s.set_number, s.weight, s.reps
-          ])
-        })
+        writeSets(setSheet, sessionId, body.sets || [])
         return jsonResponse({ ok: true, sessionId })
+      }
+      case 'updateSession': {
+        const setSheet = getSheet('Sets')
+        // Vorhandene Sätze dieser Session entfernen und neu schreiben
+        deleteRowsByField(setSheet, 'session_id', body.session_id)
+        writeSets(setSheet, body.session_id, body.sets || [])
+        // Optional Datum/Plan-Name der Session aktualisieren
+        if (body.date || body.plan_name) {
+          const sessionSheet = getSheet('Sessions')
+          const data = sessionSheet.getDataRange().getValues()
+          const headers = data[0]
+          const idCol = headers.indexOf('id')
+          for (let i = 1; i < data.length; i++) {
+            if (data[i][idCol] === body.session_id) {
+              if (body.date) sessionSheet.getRange(i + 1, headers.indexOf('date') + 1).setValue(body.date)
+              if (body.plan_name) sessionSheet.getRange(i + 1, headers.indexOf('plan_name') + 1).setValue(body.plan_name)
+              break
+            }
+          }
+        }
+        return jsonResponse({ ok: true, sessionId: body.session_id })
       }
       default: return jsonResponse({ error: 'Unknown action: ' + action })
     }
   } catch (err) {
     return jsonResponse({ error: err.message })
   }
+}
+
+// Wandelt "80,5" / "80.5" in eine echte Zahl, damit Google Sheets sie
+// nicht als Datum interpretiert. Leere Werte bleiben leer.
+function toNum(v) {
+  if (v === '' || v === null || v === undefined) return ''
+  var n = parseFloat(String(v).replace(',', '.'))
+  return isNaN(n) ? '' : n
+}
+
+function writeSets(setSheet, sessionId, sets) {
+  sets.forEach(function (s) {
+    setSheet.appendRow([
+      generateId(), sessionId, s.exercise_id || '', s.exercise_name || '',
+      toNum(s.set_number), toNum(s.weight), toNum(s.reps)
+    ])
+  })
 }
 
 function deleteRowById(sheet, id) {

@@ -30,6 +30,7 @@ export default function App() {
           <Route path="/plans" element={<RequireConfig><PlansPage /></RequireConfig>} />
           <Route path="/plans/:id" element={<RequireConfig><PlanDetailPage /></RequireConfig>} />
           <Route path="/session/:planId" element={<RequireConfig><SessionPage /></RequireConfig>} />
+          <Route path="/edit-session/:sessionId" element={<RequireConfig><SessionPage /></RequireConfig>} />
           <Route path="/history" element={<RequireConfig><HistoryPage /></RequireConfig>} />
           <Route path="/progress" element={<RequireConfig><ProgressPage /></RequireConfig>} />
         </Route>

@@ -1,5 +1,17 @@
 import styles from './SetRow.module.css'
 
+// Komma -> Punkt, nur Ziffern und ein Dezimaltrenner
+function sanitizeDecimal(v) {
+  return String(v)
+    .replace(',', '.')
+    .replace(/[^0-9.]/g, '')
+    .replace(/(\..*)\./g, '$1')
+}
+
+function sanitizeInt(v) {
+  return String(v).replace(/[^0-9]/g, '')
+}
+
 export default function SetRow({ index, set, lastData, onChange, onToggle }) {
   return (
     <div className={`${styles.row} ${set.done ? styles.rowDone : ''}`}>
@@ -7,29 +19,23 @@ export default function SetRow({ index, set, lastData, onChange, onToggle }) {
 
       <div className={styles.inputWrap}>
         <input
-          type="number"
+          type="text"
           inputMode="decimal"
-          step="0.5"
-          min="0"
-          placeholder={lastData?.weight || '0'}
+          placeholder={lastData?.weight != null ? String(lastData.weight) : '0'}
           value={set.weight}
-          onChange={e => onChange('weight', e.target.value)}
+          onChange={e => onChange('weight', sanitizeDecimal(e.target.value))}
           className={styles.input}
           disabled={set.done}
         />
-        {lastData?.weight && !set.weight && (
-          <span className={styles.hint}>{lastData.weight}</span>
-        )}
       </div>
 
       <div className={styles.inputWrap}>
         <input
-          type="number"
+          type="text"
           inputMode="numeric"
-          min="0"
-          placeholder={lastData?.reps || '0'}
+          placeholder={lastData?.reps != null ? String(lastData.reps) : '0'}
           value={set.reps}
-          onChange={e => onChange('reps', e.target.value)}
+          onChange={e => onChange('reps', sanitizeInt(e.target.value))}
           className={styles.input}
           disabled={set.done}
         />

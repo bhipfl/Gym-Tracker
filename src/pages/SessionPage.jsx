@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
-import { getPlanExercises, getLastWeights, saveSession } from '../services/api.js'
+import { getPlanExercises, getLastWeights, saveSession, getSessionSets, updateSession } from '../services/api.js'
 import { addToOfflineQueue } from '../services/storage.js'
 import ActiveExercise from '../components/ActiveExercise.jsx'
 import SessionSummary from '../components/SessionSummary.jsx'
 import styles from './SessionPage.module.css'
 
 export default function SessionPage() {
-  const { planId } = useParams()
+  const { planId, sessionId } = useParams()
   const location = useLocation()
   const navigate = useNavigate()
-  const plan = location.state?.plan || { id: planId, name: 'Training' }
+  const editMode = !!sessionId
+  const editSession = location.state?.session
+
+  const plan = editMode
+    ? { id: editSession?.plan_id, name: editSession?.plan_name || 'Training' }
+    : (location.state?.plan || { id: planId, name: 'Training' })
 
   const [exercises, setExercises] = useState([])
   const [lastWeights, setLastWeights] = useState({})
@@ -19,9 +24,42 @@ export default function SessionPage() {
   const [sessionData, setSessionData] = useState({})
   const [finished, setFinished] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [startTime] = useState(new Date())
+  const [sessionDate, setSessionDate] = useState(() =>
+    editMode && editSession?.date ? new Date(editSession.date) : new Date()
+  )
 
   useEffect(() => {
+    if (editMode) {
+      getSessionSets(sessionId)
+        .then(sets => {
+          // Übungen aus den gespeicherten Sätzen ableiten (Reihenfolge beibehalten)
+          const order = []
+          const byEx = {}
+          sets
+            .sort((a, b) => (a.set_number || 0) - (b.set_number || 0))
+            .forEach(s => {
+              if (!byEx[s.exercise_name]) {
+                byEx[s.exercise_name] = { exercise_id: s.exercise_id, sets: [] }
+                order.push(s.exercise_name)
+              }
+              byEx[s.exercise_name].sets.push({ weight: s.weight ?? '', reps: s.reps ?? '', done: false })
+            })
+          const exs = order.map((name, i) => ({
+            id: `edit-${i}`,
+            exercise_id: byEx[name].exercise_id,
+            exercise_name: name,
+            default_sets: byEx[name].sets.length
+          }))
+          const initial = {}
+          exs.forEach((ex, i) => { initial[ex.id] = byEx[order[i]].sets })
+          setExercises(exs)
+          setSessionData(initial)
+        })
+        .catch(e => setError(e.message))
+        .finally(() => setLoading(false))
+      return
+    }
+
     Promise.all([getPlanExercises(planId), getLastWeights(planId)])
       .then(([exs, weights]) => {
         setExercises(exs)
@@ -38,7 +76,7 @@ export default function SessionPage() {
       })
       .catch(e => setError(e.message))
       .finally(() => setLoading(false))
-  }, [planId])
+  }, [planId, sessionId, editMode])
 
   function handleSetChange(exId, setIdx, field, value) {
     setSessionData(prev => ({
@@ -74,7 +112,7 @@ export default function SessionPage() {
     exercises.forEach(ex => {
       const exSets = sessionData[ex.id] || []
       exSets.forEach((s, i) => {
-        if (s.weight || s.reps) {
+        if (s.weight !== '' || s.reps !== '') {
           sets.push({
             exercise_id: ex.exercise_id || ex.id,
             exercise_name: ex.exercise_name,
@@ -86,16 +124,28 @@ export default function SessionPage() {
       })
     })
     return {
-      plan_id: planId,
+      plan_id: plan.id || '',
       plan_name: plan.name,
-      date: startTime.toISOString(),
+      date: sessionDate.toISOString(),
       sets
     }
   }
 
   async function handleFinish() {
     setSaving(true)
+    setError(null)
     const payload = buildSessionPayload()
+    if (editMode) {
+      try {
+        await updateSession({ ...payload, session_id: sessionId })
+        setFinished(true)
+      } catch (e) {
+        setError('Speichern fehlgeschlagen (online nötig): ' + e.message)
+      } finally {
+        setSaving(false)
+      }
+      return
+    }
     try {
       await saveSession(payload)
     } catch (_) {
@@ -116,19 +166,24 @@ export default function SessionPage() {
     return (
       <SessionSummary
         plan={plan}
-        date={startTime}
+        date={sessionDate}
         exercises={exercises}
         sessionData={sessionData}
-        onClose={() => navigate('/')}
+        onClose={() => navigate(editMode ? '/history' : '/')}
       />
     )
   }
 
+  const cancelTarget = editMode ? '/history' : '/'
+
   return (
     <div className="page">
       <div className={styles.header}>
-        <button className="btn btn-ghost" onClick={() => { if (confirm('Training abbrechen?')) navigate('/') }}>✕</button>
-        <div className={styles.planTitle}>{plan.name}</div>
+        <button className="btn btn-ghost" onClick={() => { if (confirm(editMode ? 'Bearbeitung verwerfen?' : 'Training abbrechen?')) navigate(cancelTarget) }}>✕</button>
+        <div className={styles.planTitle}>
+          {editMode && <span className={styles.editBadge}>Bearbeiten · </span>}
+          {plan.name}
+        </div>
         <div className={styles.counter}>{totalDone}/{total}</div>
       </div>
 
@@ -141,11 +196,13 @@ export default function SessionPage() {
       {exercises.length === 0 ? (
         <div className="empty-state">
           <div className="icon">🏋️</div>
-          <h3>Keine Übungen im Plan</h3>
-          <p>Füge zuerst Übungen zum Plan hinzu.</p>
-          <button className="btn btn-secondary mt-3" onClick={() => navigate(`/plans/${planId}`, { state: { plan } })}>
-            Plan bearbeiten
-          </button>
+          <h3>{editMode ? 'Keine Sätze gefunden' : 'Keine Übungen im Plan'}</h3>
+          <p>{editMode ? 'Dieses Training enthält keine bearbeitbaren Sätze.' : 'Füge zuerst Übungen zum Plan hinzu.'}</p>
+          {!editMode && (
+            <button className="btn btn-secondary mt-3" onClick={() => navigate(`/plans/${planId}`, { state: { plan } })}>
+              Plan bearbeiten
+            </button>
+          )}
         </div>
       ) : (
         <>
@@ -169,7 +226,7 @@ export default function SessionPage() {
             onClick={handleFinish}
             disabled={saving}
           >
-            {saving ? 'Speichern...' : '🏁 Training beenden'}
+            {saving ? 'Speichern...' : editMode ? '💾 Änderungen speichern' : '🏁 Training beenden'}
           </button>
         </>
       )}

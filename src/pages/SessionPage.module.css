@@ -12,6 +12,11 @@
   text-align: center;
 }
 
+.editBadge {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .counter {
   font-size: 14px;
   font-weight: 600;

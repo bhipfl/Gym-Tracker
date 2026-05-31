@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getSessions, getSessionSets } from '../services/api.js'
 import styles from './HistoryPage.module.css'
 
 export default function HistoryPage() {
+  const navigate = useNavigate()
   const [sessions, setSessions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -89,6 +91,12 @@ export default function HistoryPage() {
                   ) : (
                     <div className="text-sm text-muted">Keine Sets aufgezeichnet.</div>
                   )}
+                  <button
+                    className="btn btn-secondary btn-sm w-full mt-3"
+                    onClick={() => navigate(`/edit-session/${session.id}`, { state: { session } })}
+                  >
+                    ✏️ Training bearbeiten
+                  </button>
                 </div>
               )}
             </div>

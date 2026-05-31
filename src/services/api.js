@@ -86,6 +86,10 @@ export async function saveSession(session) {
   return post('saveSession', session)
 }
 
+export async function updateSession(session) {
+  return post('updateSession', session)
+}
+
 export async function getSessionSets(sessionId) {
   const data = await get('getSessionSets', { sessionId })
   return data.sets || []
