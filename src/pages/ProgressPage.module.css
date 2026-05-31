@@ -1,1 +1,31 @@
 .chartTitle { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+
+.searchWrap { position: relative; }
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  z-index: 50;
+  overflow-y: auto;
+  max-height: 220px;
+  box-shadow: var(--shadow);
+}
+
+.dropItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+.dropItem:last-child { border-bottom: none; }
+.dropItem:hover, .dropActive { background: var(--bg3); color: var(--accent); }

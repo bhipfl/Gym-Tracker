@@ -1,33 +1,55 @@
 .header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 20px;
+  min-height: 40px;
 }
-.title { flex: 1; font-size: 20px; font-weight: 800; }
+
+.titleBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--text);
+  min-width: 0;
+}
+
+.title { font-size: 18px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.editIcon { font-size: 14px; opacity: 0.5; flex-shrink: 0; }
+.titleBtn:hover .editIcon { opacity: 1; }
+
+.renameWrap { flex: 1; display: flex; gap: 6px; align-items: center; }
+.renameInput { flex: 1; font-size: 16px; font-weight: 700; }
 
 .list { display: flex; flex-direction: column; gap: 8px; }
 
 .exCard {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   padding: 12px 14px;
 }
 
-.exNum {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--accent2);
-  color: var(--text);
+.reorderBtns { display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
+
+.moveBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text2);
+  font-size: 10px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  flex-shrink: 0;
 }
+.moveBtn:hover:not(:disabled) { color: var(--text); border-color: var(--accent); }
+.moveBtn:disabled { opacity: 0.25; cursor: not-allowed; }
 
 .exInfo { flex: 1; min-width: 0; }
 .exName { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

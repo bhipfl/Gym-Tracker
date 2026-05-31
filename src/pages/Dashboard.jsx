@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getPlans, getSessions } from '../services/api.js'
 import { getOfflineQueue } from '../services/storage.js'
+import { syncOfflineQueue } from '../services/sync.js'
 import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
@@ -10,19 +11,32 @@ export default function Dashboard() {
   const [sessions, setSessions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const offlineCount = getOfflineQueue().length
+  const [offlineCount, setOfflineCount] = useState(getOfflineQueue().length)
+  const [syncMsg, setSyncMsg] = useState(null)
 
   useEffect(() => {
     Promise.all([getPlans(), getSessions(5)])
       .then(([p, s]) => { setPlans(p); setSessions(s) })
       .catch(e => setError(e.message))
       .finally(() => setLoading(false))
+
+    // Flush offline queue in background
+    if (getOfflineQueue().length > 0 && navigator.onLine) {
+      syncOfflineQueue().then(({ synced }) => {
+        if (synced > 0) {
+          setOfflineCount(getOfflineQueue().length)
+          setSyncMsg(`✅ ${synced} Training${synced > 1 ? 's' : ''} synchronisiert`)
+          setTimeout(() => setSyncMsg(null), 4000)
+          // Refresh sessions list
+          getSessions(5).then(setSessions).catch(() => {})
+        }
+      }).catch(() => {})
+    }
   }, [])
 
   function formatDate(iso) {
     if (!iso) return ''
-    const d = new Date(iso)
-    return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
   }
 
   if (loading) return <div className="page"><div className="spinner" /></div>
@@ -38,6 +52,7 @@ export default function Dashboard() {
       </div>
 
       {error && <div className="error-msg">{error}</div>}
+      {syncMsg && <div className="success-msg">{syncMsg}</div>}
 
       {offlineCount > 0 && (
         <div className={styles.offlineBanner}>

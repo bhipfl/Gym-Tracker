@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getSessions, getSessionSets } from '../services/api.js'
+import { getSessions, getSessionSets, deleteSession } from '../services/api.js'
 import styles from './HistoryPage.module.css'
 
 export default function HistoryPage() {
@@ -11,6 +11,7 @@ export default function HistoryPage() {
   const [expanded, setExpanded] = useState(null)
   const [sets, setSets] = useState({})
   const [loadingSets, setLoadingSets] = useState(null)
+  const [deleting, setDeleting] = useState(null)
 
   useEffect(() => {
     getSessions(100)
@@ -29,6 +30,20 @@ export default function HistoryPage() {
         setSets(prev => ({ ...prev, [session.id]: s }))
       } catch (_) {}
       setLoadingSets(null)
+    }
+  }
+
+  async function handleDelete(session) {
+    if (!confirm(`Training vom ${formatDate(session.date)} wirklich löschen?`)) return
+    setDeleting(session.id)
+    try {
+      await deleteSession(session.id)
+      setSessions(prev => prev.filter(s => s.id !== session.id))
+      if (expanded === session.id) setExpanded(null)
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setDeleting(null)
     }
   }
 
@@ -52,7 +67,6 @@ export default function HistoryPage() {
   return (
     <div className="page">
       <div className="page-title">Trainingsverlauf</div>
-
       {error && <div className="error-msg">{error}</div>}
 
       {sessions.length === 0 ? (
@@ -75,14 +89,17 @@ export default function HistoryPage() {
 
               {expanded === session.id && (
                 <div className={styles.detail}>
+                  {session.notes && (
+                    <div className={styles.sessionNotes}>💬 {session.notes}</div>
+                  )}
                   {loadingSets === session.id ? (
                     <div className="text-sm text-muted">Lade...</div>
                   ) : sets[session.id]?.length > 0 ? (
                     Object.entries(groupSets(sets[session.id])).map(([name, exSets]) => (
                       <div key={name} className={styles.exGroup}>
                         <div className={styles.exName}>{name}</div>
-                        {exSets.sort((a, b) => a.set_number - b.set_number).map(s => (
-                          <div key={s.id} className={styles.setLine}>
+                        {exSets.sort((a, b) => Number(a.set_number) - Number(b.set_number)).map((s, i) => (
+                          <div key={i} className={styles.setLine}>
                             Satz {s.set_number}: {s.weight} kg × {s.reps} Wdh
                           </div>
                         ))}
@@ -91,12 +108,22 @@ export default function HistoryPage() {
                   ) : (
                     <div className="text-sm text-muted">Keine Sets aufgezeichnet.</div>
                   )}
-                  <button
-                    className="btn btn-secondary btn-sm w-full mt-3"
-                    onClick={() => navigate(`/edit-session/${session.id}`, { state: { session } })}
-                  >
-                    ✏️ Training bearbeiten
-                  </button>
+
+                  <div className={styles.detailActions}>
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => navigate(`/edit-session/${session.id}`, { state: { session } })}
+                    >
+                      ✏️ Bearbeiten
+                    </button>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDelete(session)}
+                      disabled={deleting === session.id}
+                    >
+                      {deleting === session.id ? '...' : '🗑️ Löschen'}
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

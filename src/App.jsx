@@ -25,12 +25,13 @@ export default function App() {
       <InstallPrompt />
       <Routes>
         <Route path="/settings" element={<SettingsPage />} />
+        {/* Session routes are OUTSIDE Layout so the nav bar is hidden during training */}
+        <Route path="/session/:planId" element={<RequireConfig><SessionPage /></RequireConfig>} />
+        <Route path="/edit-session/:sessionId" element={<RequireConfig><SessionPage /></RequireConfig>} />
         <Route element={<Layout />}>
           <Route path="/" element={<RequireConfig><Dashboard /></RequireConfig>} />
           <Route path="/plans" element={<RequireConfig><PlansPage /></RequireConfig>} />
           <Route path="/plans/:id" element={<RequireConfig><PlanDetailPage /></RequireConfig>} />
-          <Route path="/session/:planId" element={<RequireConfig><SessionPage /></RequireConfig>} />
-          <Route path="/edit-session/:sessionId" element={<RequireConfig><SessionPage /></RequireConfig>} />
           <Route path="/history" element={<RequireConfig><HistoryPage /></RequireConfig>} />
           <Route path="/progress" element={<RequireConfig><ProgressPage /></RequireConfig>} />
         </Route>

@@ -1,20 +1,29 @@
 import SetRow from './SetRow.jsx'
 import styles from './ActiveExercise.module.css'
 
-export default function ActiveExercise({ exercise, sets, lastWeights, onChange, onToggle, onAddSet, onRemoveSet }) {
+export default function ActiveExercise({ exercise, sets, hasLastWeights, onChange, onToggle, onAddSet, onRemoveSet, onFillLast, onRemoveExercise }) {
   const doneSets = sets.filter(s => s.done).length
+  const allDone = sets.length > 0 && doneSets === sets.length
 
   return (
-    <div className={`card ${styles.exercise}`}>
+    <div className={`card ${styles.exercise} ${allDone ? styles.allDone : ''}`}>
       <div className={styles.exHeader}>
-        <div>
+        <div className={styles.exMeta}>
           <div className={styles.exName}>{exercise.exercise_name}</div>
           {exercise.muscle_group && <div className="text-xs text-muted">{exercise.muscle_group}</div>}
         </div>
-        <div className={styles.exProgress}>
-          <span className={doneSets === sets.length && sets.length > 0 ? styles.done : ''}>
+        <div className={styles.exActions}>
+          {hasLastWeights && (
+            <button className={styles.fillBtn} onClick={onFillLast} title="Letzte Werte übernehmen">
+              ↩
+            </button>
+          )}
+          <div className={`${styles.exProgress} ${allDone ? styles.done : ''}`}>
             {doneSets}/{sets.length}
-          </span>
+          </div>
+          <button className={styles.removeExBtn} onClick={onRemoveExercise} title="Übung entfernen">
+            ✕
+          </button>
         </div>
       </div>
 
@@ -31,7 +40,6 @@ export default function ActiveExercise({ exercise, sets, lastWeights, onChange, 
             key={i}
             index={i}
             set={set}
-            lastData={lastWeights?.[i + 1]}
             onChange={(field, val) => onChange(i, field, val)}
             onToggle={() => onToggle(i)}
           />

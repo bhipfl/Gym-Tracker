@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
-import { getPlanExercises, getLastWeights, saveSession, getSessionSets, updateSession } from '../services/api.js'
+import { getPlanStartData, getSessionSets, saveSession, updateSession } from '../services/api.js'
 import { addToOfflineQueue } from '../services/storage.js'
 import ActiveExercise from '../components/ActiveExercise.jsx'
+import ExercisePicker from '../components/ExercisePicker.jsx'
 import SessionSummary from '../components/SessionSummary.jsx'
 import styles from './SessionPage.module.css'
 
@@ -14,17 +15,19 @@ export default function SessionPage() {
   const editSession = location.state?.session
 
   const plan = editMode
-    ? { id: editSession?.plan_id, name: editSession?.plan_name || 'Training' }
+    ? { id: editSession?.plan_id || '', name: editSession?.plan_name || 'Training' }
     : (location.state?.plan || { id: planId, name: 'Training' })
 
   const [exercises, setExercises] = useState([])
   const [lastWeights, setLastWeights] = useState({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [sessionData, setSessionData] = useState({})
+  const [sessionData, setSessionData] = useState({})  // { [exId]: [{weight, reps, done}] }
+  const [notes, setNotes] = useState('')
   const [finished, setFinished] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [sessionDate, setSessionDate] = useState(() =>
+  const [showPicker, setShowPicker] = useState(false)
+  const [sessionDate] = useState(() =>
     editMode && editSession?.date ? new Date(editSession.date) : new Date()
   )
 
@@ -32,17 +35,21 @@ export default function SessionPage() {
     if (editMode) {
       getSessionSets(sessionId)
         .then(sets => {
-          // Übungen aus den gespeicherten Sätzen ableiten (Reihenfolge beibehalten)
+          setNotes(editSession?.notes || '')
           const order = []
           const byEx = {}
           sets
-            .sort((a, b) => (a.set_number || 0) - (b.set_number || 0))
+            .sort((a, b) => (Number(a.set_number) || 0) - (Number(b.set_number) || 0))
             .forEach(s => {
               if (!byEx[s.exercise_name]) {
                 byEx[s.exercise_name] = { exercise_id: s.exercise_id, sets: [] }
                 order.push(s.exercise_name)
               }
-              byEx[s.exercise_name].sets.push({ weight: s.weight ?? '', reps: s.reps ?? '', done: false })
+              byEx[s.exercise_name].sets.push({
+                weight: s.weight != null ? String(s.weight) : '',
+                reps: s.reps != null ? String(s.reps) : '',
+                done: true // pre-mark done in edit mode so they save by default
+              })
             })
           const exs = order.map((name, i) => ({
             id: `edit-${i}`,
@@ -60,17 +67,14 @@ export default function SessionPage() {
       return
     }
 
-    Promise.all([getPlanExercises(planId), getLastWeights(planId)])
-      .then(([exs, weights]) => {
+    getPlanStartData(planId)
+      .then(({ exercises: exs, lastWeights: lw }) => {
         setExercises(exs)
-        setLastWeights(weights)
+        setLastWeights(lw)
         const initial = {}
         exs.forEach(ex => {
-          const sets = parseInt(ex.default_sets) || 3
-          initial[ex.id] = Array.from({ length: sets }, (_, i) => {
-            const last = weights[ex.exercise_name]?.[i + 1]
-            return { weight: last?.weight || '', reps: last?.reps || '', done: false }
-          })
+          const count = parseInt(ex.default_sets) || 3
+          initial[ex.id] = Array.from({ length: count }, () => ({ weight: '', reps: '', done: false }))
         })
         setSessionData(initial)
       })
@@ -78,89 +82,112 @@ export default function SessionPage() {
       .finally(() => setLoading(false))
   }, [planId, sessionId, editMode])
 
-  function handleSetChange(exId, setIdx, field, value) {
+  const handleSetChange = useCallback((exId, setIdx, field, value) => {
     setSessionData(prev => ({
       ...prev,
       [exId]: prev[exId].map((s, i) => i === setIdx ? { ...s, [field]: value } : s)
     }))
-  }
+  }, [])
 
-  function handleSetToggle(exId, setIdx) {
+  const handleSetToggle = useCallback((exId, setIdx) => {
     setSessionData(prev => ({
       ...prev,
       [exId]: prev[exId].map((s, i) => i === setIdx ? { ...s, done: !s.done } : s)
     }))
-  }
+  }, [])
 
-  function handleAddSet(exId) {
+  const handleAddSet = useCallback((exId) => {
+    setSessionData(prev => ({ ...prev, [exId]: [...prev[exId], { weight: '', reps: '', done: false }] }))
+  }, [])
+
+  const handleRemoveSet = useCallback((exId) => {
+    setSessionData(prev => {
+      if (prev[exId].length <= 1) return prev
+      return { ...prev, [exId]: prev[exId].slice(0, -1) }
+    })
+  }, [])
+
+  function handleFillLastWeights(ex) {
+    const lw = lastWeights[ex.exercise_name]
+    if (!lw) return
     setSessionData(prev => ({
       ...prev,
-      [exId]: [...prev[exId], { weight: '', reps: '', done: false }]
+      [ex.id]: prev[ex.id].map((s, i) => {
+        const last = lw[i + 1]
+        if (!last) return s
+        return { ...s, weight: s.weight || String(last.weight || ''), reps: s.reps || String(last.reps || '') }
+      })
     }))
   }
 
-  function handleRemoveSet(exId) {
-    setSessionData(prev => {
-      const sets = prev[exId]
-      if (sets.length <= 1) return prev
-      return { ...prev, [exId]: sets.slice(0, -1) }
-    })
+  function handleRemoveExercise(exId) {
+    setExercises(prev => prev.filter(ex => ex.id !== exId))
+    setSessionData(prev => { const next = { ...prev }; delete next[exId]; return next })
   }
 
-  function buildSessionPayload() {
+  function handleAddExercise(exercise) {
+    setShowPicker(false)
+    const newId = `new-${Date.now()}`
+    const count = parseInt(exercise.default_sets) || 3
+    setExercises(prev => [...prev, { id: newId, exercise_id: exercise.exercise_id, exercise_name: exercise.exercise_name, muscle_group: exercise.muscle_group || '', default_sets: count }])
+    setSessionData(prev => ({ ...prev, [newId]: Array.from({ length: count }, () => ({ weight: '', reps: '', done: false })) }))
+  }
+
+  function buildPayload() {
     const sets = []
     exercises.forEach(ex => {
-      const exSets = sessionData[ex.id] || []
-      exSets.forEach((s, i) => {
-        if (s.weight !== '' || s.reps !== '') {
-          sets.push({
-            exercise_id: ex.exercise_id || ex.id,
-            exercise_name: ex.exercise_name,
-            set_number: i + 1,
-            weight: s.weight,
-            reps: s.reps
-          })
-        }
+      ;(sessionData[ex.id] || []).forEach((s, i) => {
+        // Only save sets that are marked done
+        if (!s.done) return
+        sets.push({
+          exercise_id: ex.exercise_id || '',
+          exercise_name: ex.exercise_name,
+          set_number: i + 1,
+          weight: s.weight,
+          reps: s.reps
+        })
       })
     })
-    return {
-      plan_id: plan.id || '',
-      plan_name: plan.name,
-      date: sessionDate.toISOString(),
-      sets
-    }
+    return { plan_id: plan.id || '', plan_name: plan.name, date: sessionDate.toISOString(), notes, sets }
   }
 
   async function handleFinish() {
     setSaving(true)
     setError(null)
-    const payload = buildSessionPayload()
+    const payload = buildPayload()
+
     if (editMode) {
       try {
         await updateSession({ ...payload, session_id: sessionId })
         setFinished(true)
-      } catch (e) {
-        setError('Speichern fehlgeschlagen (online nötig): ' + e.message)
+      } catch (err) {
+        setError('Speichern fehlgeschlagen: ' + err.message)
       } finally {
         setSaving(false)
       }
       return
     }
+
     try {
       await saveSession(payload)
-    } catch (_) {
-      addToOfflineQueue(payload)
-    } finally {
-      setSaving(false)
-      setFinished(true)
+    } catch (err) {
+      if (err instanceof TypeError || !navigator.onLine) {
+        addToOfflineQueue(payload)
+      } else {
+        setError('Speichern fehlgeschlagen: ' + err.message)
+        setSaving(false)
+        return
+      }
     }
+    setSaving(false)
+    setFinished(true)
   }
 
-  const totalDone = Object.values(sessionData).flat().filter(s => s.done).length
+  const doneSets = Object.values(sessionData).flat().filter(s => s.done).length
   const total = Object.values(sessionData).flat().length
-  const progress = total > 0 ? (totalDone / total) * 100 : 0
+  const progress = total > 0 ? (doneSets / total) * 100 : 0
 
-  if (loading) return <div className="page"><div className="spinner" /></div>
+  if (loading) return <div className={styles.fullpage}><div className="spinner" /></div>
 
   if (finished) {
     return (
@@ -169,67 +196,97 @@ export default function SessionPage() {
         date={sessionDate}
         exercises={exercises}
         sessionData={sessionData}
+        isEdit={editMode}
         onClose={() => navigate(editMode ? '/history' : '/')}
       />
     )
   }
 
-  const cancelTarget = editMode ? '/history' : '/'
-
   return (
-    <div className="page">
+    <div className={styles.fullpage}>
+      {/* Header */}
       <div className={styles.header}>
-        <button className="btn btn-ghost" onClick={() => { if (confirm(editMode ? 'Bearbeitung verwerfen?' : 'Training abbrechen?')) navigate(cancelTarget) }}>✕</button>
+        <button
+          className="btn btn-ghost"
+          onClick={() => { if (confirm(editMode ? 'Bearbeitung verwerfen?' : 'Training abbrechen?')) navigate(editMode ? '/history' : '/') }}
+        >
+          ✕
+        </button>
         <div className={styles.planTitle}>
-          {editMode && <span className={styles.editBadge}>Bearbeiten · </span>}
+          {editMode && <span className={styles.editBadge}>✏️ </span>}
           {plan.name}
         </div>
-        <div className={styles.counter}>{totalDone}/{total}</div>
+        <div className={styles.counter}>{doneSets}/{total}</div>
       </div>
 
+      {/* Progress bar */}
       <div className={styles.progressBar}>
         <div className={styles.progressFill} style={{ width: `${progress}%` }} />
       </div>
 
-      {error && <div className="error-msg">{error}</div>}
+      {/* Scrollable content */}
+      <div className={styles.scroll}>
+        {error && <div className="error-msg">{error}</div>}
 
-      {exercises.length === 0 ? (
-        <div className="empty-state">
-          <div className="icon">🏋️</div>
-          <h3>{editMode ? 'Keine Sätze gefunden' : 'Keine Übungen im Plan'}</h3>
-          <p>{editMode ? 'Dieses Training enthält keine bearbeitbaren Sätze.' : 'Füge zuerst Übungen zum Plan hinzu.'}</p>
-          {!editMode && (
-            <button className="btn btn-secondary mt-3" onClick={() => navigate(`/plans/${planId}`, { state: { plan } })}>
-              Plan bearbeiten
-            </button>
-          )}
-        </div>
-      ) : (
-        <>
-          <div className={styles.exercises}>
-            {exercises.map(ex => (
-              <ActiveExercise
-                key={ex.id}
-                exercise={ex}
-                sets={sessionData[ex.id] || []}
-                lastWeights={lastWeights[ex.exercise_name]}
-                onChange={(setIdx, field, val) => handleSetChange(ex.id, setIdx, field, val)}
-                onToggle={(setIdx) => handleSetToggle(ex.id, setIdx)}
-                onAddSet={() => handleAddSet(ex.id)}
-                onRemoveSet={() => handleRemoveSet(ex.id)}
-              />
-            ))}
+        {exercises.length === 0 ? (
+          <div className="empty-state">
+            <div className="icon">🏋️</div>
+            <h3>{editMode ? 'Keine Sätze gefunden' : 'Keine Übungen im Plan'}</h3>
+            {!editMode && (
+              <button className="btn btn-secondary mt-3" onClick={() => navigate(`/plans/${planId}`, { state: { plan } })}>
+                Plan bearbeiten
+              </button>
+            )}
           </div>
+        ) : (
+          exercises.map(ex => (
+            <ActiveExercise
+              key={ex.id}
+              exercise={ex}
+              sets={sessionData[ex.id] || []}
+              hasLastWeights={!editMode && !!lastWeights[ex.exercise_name]}
+              onChange={(setIdx, field, val) => handleSetChange(ex.id, setIdx, field, val)}
+              onToggle={(setIdx) => handleSetToggle(ex.id, setIdx)}
+              onAddSet={() => handleAddSet(ex.id)}
+              onRemoveSet={() => handleRemoveSet(ex.id)}
+              onFillLast={() => handleFillLastWeights(ex)}
+              onRemoveExercise={() => handleRemoveExercise(ex.id)}
+            />
+          ))
+        )}
 
-          <button
-            className={`btn btn-primary btn-full ${styles.finishBtn}`}
-            onClick={handleFinish}
-            disabled={saving}
-          >
-            {saving ? 'Speichern...' : editMode ? '💾 Änderungen speichern' : '🏁 Training beenden'}
+        {/* Add exercise mid-session */}
+        {showPicker ? (
+          <ExercisePicker
+            onSelect={handleAddExercise}
+            onCancel={() => setShowPicker(false)}
+            existingNames={exercises.map(e => e.exercise_name)}
+          />
+        ) : (
+          <button className={`btn btn-secondary btn-full ${styles.addExBtn}`} onClick={() => setShowPicker(true)}>
+            ➕ Übung hinzufügen
           </button>
-        </>
-      )}
+        )}
+
+        {/* Session notes */}
+        <div className={styles.notesWrap}>
+          <label className="label">Notiz (optional)</label>
+          <textarea
+            className={styles.notes}
+            placeholder="z.B. Schulter zwickt, nächstes Mal mehr Gewicht..."
+            value={notes}
+            onChange={e => setNotes(e.target.value)}
+            rows={2}
+          />
+        </div>
+      </div>
+
+      {/* Sticky finish button */}
+      <div className={styles.footer}>
+        <button className="btn btn-primary btn-full" onClick={handleFinish} disabled={saving}>
+          {saving ? 'Speichern...' : editMode ? '💾 Änderungen speichern' : '🏁 Training beenden'}
+        </button>
+      </div>
     </div>
   )
 }

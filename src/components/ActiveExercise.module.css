@@ -1,20 +1,52 @@
-.exercise { padding: 14px; }
+.exercise {
+  padding: 14px;
+  transition: border-color 0.3s;
+}
+
+.allDone { border-color: var(--success) !important; }
 
 .exHeader {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 10px;
+  gap: 8px;
 }
 
+.exMeta { flex: 1; min-width: 0; }
 .exName { font-weight: 700; font-size: 16px; }
 
-.exProgress {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text2);
-}
+.exActions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+.exProgress { font-size: 14px; font-weight: 700; color: var(--text2); }
 .done { color: var(--success) !important; }
+
+.fillBtn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-size: 15px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fillBtn:hover { color: var(--text); border-color: var(--accent); }
+
+.removeExBtn {
+  background: transparent;
+  color: var(--text2);
+  font-size: 14px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.removeExBtn:hover { color: var(--accent); }
 
 .labels {
   display: grid;
@@ -31,9 +63,4 @@
 
 .sets { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
 
-.setActions {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  margin-top: 2px;
-}
+.setActions { display: flex; gap: 8px; justify-content: flex-end; }

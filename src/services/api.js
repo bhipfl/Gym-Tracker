@@ -6,9 +6,7 @@ function buildUrl(action, params = {}) {
   const url = new URL(config.url)
   url.searchParams.set('action', action)
   url.searchParams.set('token', config.token || '')
-  for (const [k, v] of Object.entries(params)) {
-    url.searchParams.set(k, v)
-  }
+  for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v)
   return url.toString()
 }
 
@@ -38,69 +36,33 @@ async function post(action, body) {
   return data
 }
 
-export async function testConnection() {
-  return get('ping')
+export const testConnection = () => get('ping')
+
+export async function getPlans() { return (await get('getPlans')).plans || [] }
+export const savePlan = (plan) => post('savePlan', plan)
+export const deletePlan = (id) => post('deletePlan', { id })
+
+export async function getPlanExercises(planId) { return (await get('getPlanExercises', { planId })).exercises || [] }
+
+// Single round-trip for session start
+export async function getPlanStartData(planId) {
+  const data = await get('getPlanStartData', { planId })
+  return { exercises: data.exercises || [], lastWeights: data.lastWeights || {} }
 }
 
-export async function getPlans() {
-  const data = await get('getPlans')
-  return data.plans || []
-}
+export const addExerciseToPlan = (planId, exercise) => post('addExerciseToPlan', { planId, ...exercise })
+export const removeExerciseFromPlan = (planId, exerciseId) => post('removeExerciseFromPlan', { planId, exerciseId })
+export const updatePlanExercise = (planId, exerciseId, updates) => post('updatePlanExercise', { planId, exerciseId, ...updates })
+export const reorderPlanExercises = (updates) => post('reorderPlanExercises', { updates })
 
-export async function savePlan(plan) {
-  return post('savePlan', plan)
-}
+export async function searchExercises(q) { return (await get('searchExercises', { q })).exercises || [] }
+export async function getUsedExerciseNames() { return (await get('getUsedExerciseNames')).names || [] }
 
-export async function deletePlan(id) {
-  return post('deletePlan', { id })
-}
+export async function getSessions(limit = 50) { return (await get('getSessions', { limit })).sessions || [] }
+export const saveSession = (session) => post('saveSession', session)
+export const updateSession = (session) => post('updateSession', session)
+export const deleteSession = (id) => post('deleteSession', { id })
 
-export async function getPlanExercises(planId) {
-  const data = await get('getPlanExercises', { planId })
-  return data.exercises || []
-}
-
-export async function addExerciseToPlan(planId, exercise) {
-  return post('addExerciseToPlan', { planId, ...exercise })
-}
-
-export async function removeExerciseFromPlan(planId, exerciseId) {
-  return post('removeExerciseFromPlan', { planId, exerciseId })
-}
-
-export async function updatePlanExercise(planId, exerciseId, updates) {
-  return post('updatePlanExercise', { planId, exerciseId, ...updates })
-}
-
-export async function searchExercises(q) {
-  const data = await get('searchExercises', { q })
-  return data.exercises || []
-}
-
-export async function getSessions(limit = 50) {
-  const data = await get('getSessions', { limit })
-  return data.sessions || []
-}
-
-export async function saveSession(session) {
-  return post('saveSession', session)
-}
-
-export async function updateSession(session) {
-  return post('updateSession', session)
-}
-
-export async function getSessionSets(sessionId) {
-  const data = await get('getSessionSets', { sessionId })
-  return data.sets || []
-}
-
-export async function getExerciseProgress(exerciseName) {
-  const data = await get('getExerciseProgress', { exerciseName })
-  return data.progress || []
-}
-
-export async function getLastWeights(planId) {
-  const data = await get('getLastWeights', { planId })
-  return data.weights || {}
-}
+export async function getSessionSets(sessionId) { return (await get('getSessionSets', { sessionId })).sets || [] }
+export async function getExerciseProgress(exerciseName) { return (await get('getExerciseProgress', { exerciseName })).progress || [] }
+export async function getLastWeights(planId) { return (await get('getLastWeights', { planId })).weights || {} }
