@@ -33,6 +33,11 @@ html, body {
   flex-direction: column;
 }
 
+/* Schiebt den Inhalt unter das fixe Installations-Banner */
+body.has-install-banner #root {
+  padding-top: calc(72px + env(safe-area-inset-top));
+}
+
 a { color: inherit; text-decoration: none; }
 
 button {

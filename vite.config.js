@@ -13,9 +13,12 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/*.png'],
       manifest: {
+        id: base,
         name: 'Gym Tracker',
         short_name: 'GymTracker',
-        description: 'Track your workouts, weights and progress',
+        description: 'Trainingspläne, Gewichte & Fortschritt tracken',
+        lang: 'de',
+        categories: ['health', 'fitness', 'sports'],
         theme_color: '#1a1a2e',
         background_color: '#1a1a2e',
         display: 'standalone',

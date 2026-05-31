@@ -7,6 +7,7 @@ import SessionPage from './pages/SessionPage.jsx'
 import HistoryPage from './pages/HistoryPage.jsx'
 import ProgressPage from './pages/ProgressPage.jsx'
 import SettingsPage from './pages/SettingsPage.jsx'
+import InstallPrompt from './components/InstallPrompt.jsx'
 import { getConfig } from './services/storage.js'
 import { useEffect, useState } from 'react'
 
@@ -21,6 +22,7 @@ function RequireConfig({ children }) {
 export default function App() {
   return (
     <HashRouter>
+      <InstallPrompt />
       <Routes>
         <Route path="/settings" element={<SettingsPage />} />
         <Route element={<Layout />}>
