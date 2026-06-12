@@ -1,0 +1,131 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 800;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tabActive {
+  background: var(--accent2);
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.noteList,
+.planList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.noteInput {
+  width: 100%;
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  line-height: 1.5;
+}
+.noteInput:focus { border-color: var(--accent); }
+
+.noteCard { padding: 12px 16px; }
+
+.noteHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.noteDelete {
+  background: transparent;
+  color: var(--text2);
+  font-size: 13px;
+  padding: 2px 6px;
+}
+.noteDelete:hover { color: var(--accent); }
+
+.noteText {
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.planRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  text-align: left;
+  color: var(--text);
+}
+
+.planSelectable:hover { border-color: var(--accent); }
+
+.assignSheet { margin-bottom: 12px; }
+
+.sessionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  padding: 0;
+}
+
+.sessionDetail {
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sessionNotes {
+  font-size: 13px;
+  color: var(--text2);
+  background: var(--bg3);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+
+.exGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}

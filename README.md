@@ -1,11 +1,17 @@
-# Gym Tracker PWA
+# Gym Tracker PWA — Coach-Plattform
 
-Progressive Web App zum Tracken von Trainingsplänen, Übungen, Sätzen, Gewichten und Wiederholungen — mit Fortschritts-Charts und kopierbarem Klartext-Export für den Google Health Coach. Backend: Google Sheets via Apps Script.
+Progressive Web App für Personal Coaches und ihre Klienten:
+
+- **Coach**: verwaltet Klienten, legt Trainingspläne (Templates) an, weist sie Klienten zu, führt pro Klient eine **Akte** mit Notizen und sieht Trainings & Fortschritt (read-only).
+- **Klient**: kommt per Einladungslink, trackt Trainings (Sätze, Gewichte, Wdh.) mit Pausen-Timer, Übungsbildern und Fortschritts-Charts — offlinefähig.
+
+Backend: **Supabase** (Postgres + Auth + Row Level Security + Storage). Setup: [`supabase/README.md`](supabase/README.md).
 
 ## Entwicklung
 
 ```bash
 npm install
+# .env.local mit VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY anlegen (siehe supabase/README.md)
 npm run dev      # Dev-Server
 npm run build    # Production-Build nach dist/
 npm run preview  # Build lokal testen
@@ -24,7 +30,7 @@ Das Skript schreibt `src/data/exercises.de.json` und `public/exercise-images/` �
 
 ## Backend einrichten
 
-Siehe [`apps-script/README.md`](apps-script/README.md) — Google Sheet + Apps Script anlegen, als Web App deployen, dann URL + Token in der App unter **Einstellungen** eingeben. Keine Credentials liegen im Code; sie werden nur im `localStorage` des Browsers gespeichert.
+Siehe [`supabase/README.md`](supabase/README.md) — Supabase-Projekt anlegen, [`supabase/schema.sql`](supabase/schema.sql) ausführen, Env-Variablen setzen. Bestehende Google-Sheets-Daten lassen sich einmalig mit `scripts/migrate-sheets.mjs` migrieren (das alte Apps-Script-Backend liegt als Referenz weiter unter `apps-script/`).
 
 ## Deployment (GitHub Pages)
 
@@ -41,4 +47,4 @@ Live-URL: **https://bhipfl.github.io/Gym-Tracker/**
 
 ## Tech Stack
 
-React 18 · Vite · vite-plugin-pwa (Workbox) · React Router · Google Apps Script + Google Sheets
+React 18 · Vite · TanStack Query (persistierter Cache) · vite-plugin-pwa (Workbox) · React Router · Supabase (Postgres, Auth, RLS, Storage) · wger-Übungsdatenbank

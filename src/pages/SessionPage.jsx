@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
-import { saveSession, updateSession } from '../services/api.js'
+import { saveSession, updateSession, isNetworkError } from '../services/api.js'
 import { usePlanStartData, useSessionSets, useInvalidateAfterSession } from '../hooks/queries.js'
 import { addToOfflineQueue, getConfig } from '../services/storage.js'
 import { buzz } from '../utils/haptics.js'
@@ -218,7 +218,7 @@ export default function SessionPage() {
       await saveSession(payload)
       invalidateAfterSession(plan.id)
     } catch (err) {
-      if (err instanceof TypeError || !navigator.onLine) {
+      if (isNetworkError(err) || !navigator.onLine) {
         addToOfflineQueue(payload)
       } else {
         setError('Speichern fehlgeschlagen: ' + err.message)

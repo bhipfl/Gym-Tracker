@@ -43,15 +43,6 @@ export default defineConfig({
               cacheableResponse: { statuses: [0, 200] }
             }
           },
-          {
-            urlPattern: /^https:\/\/script\.google\.com\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'api-cache',
-              networkTimeoutSeconds: 10,
-              cacheableResponse: { statuses: [0, 200] }
-            }
-          }
         ]
       }
     })

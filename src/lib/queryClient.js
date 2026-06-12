@@ -3,7 +3,7 @@ import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persist
 
 // Bei Änderungen an der Datenform der Queries hochzählen,
 // damit der persistierte Cache verworfen wird.
-export const CACHE_BUSTER = 'v1'
+export const CACHE_BUSTER = 'v2'
 
 export const queryClient = new QueryClient({
   defaultOptions: {

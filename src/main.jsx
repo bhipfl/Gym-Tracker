@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { queryClient, persister, CACHE_BUSTER } from './lib/queryClient.js'
+import { AuthProvider } from './context/AuthContext.jsx'
 import App from './App.jsx'
 import './index.css'
 
@@ -11,7 +12,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       client={queryClient}
       persistOptions={{ persister, buster: CACHE_BUSTER }}
     >
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </PersistQueryClientProvider>
   </React.StrictMode>
 )

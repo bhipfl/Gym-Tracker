@@ -1,7 +1,8 @@
 import { Outlet, NavLink, useLocation } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext.jsx'
 import styles from './Layout.module.css'
 
-const nav = [
+const clientNav = [
   { to: '/', label: 'Home', icon: '🏠' },
   { to: '/plans', label: 'Pläne', icon: '📋' },
   { to: '/history', label: 'Verlauf', icon: '📅' },
@@ -9,8 +10,18 @@ const nav = [
   { to: '/settings', label: 'Settings', icon: '⚙️' },
 ]
 
+const coachNav = [
+  { to: '/coach', label: 'Klienten', icon: '🤝' },
+  { to: '/plans', label: 'Pläne', icon: '📋' },
+  { to: '/history', label: 'Verlauf', icon: '📅' },
+  { to: '/settings', label: 'Settings', icon: '⚙️' },
+]
+
 export default function Layout() {
   const location = useLocation()
+  const { role } = useAuth()
+  const nav = role === 'coach' ? coachNav : clientNav
+
   return (
     <div className={styles.layout}>
       <main key={location.pathname} className={`${styles.main} page-transition`}>
@@ -21,7 +32,7 @@ export default function Layout() {
           <NavLink
             key={to}
             to={to}
-            end={to === '/'}
+            end={to === '/' || to === '/coach'}
             className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}
           >
             <span className={styles.navIcon}>{icon}</span>

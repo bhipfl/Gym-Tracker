@@ -1,5 +1,5 @@
 import { getOfflineQueue } from './storage.js'
-import { saveSession } from './api.js'
+import { saveSession, isNetworkError } from './api.js'
 
 export async function syncOfflineQueue() {
   if (!navigator.onLine) return { synced: 0, failed: 0 }
@@ -15,9 +15,9 @@ export async function syncOfflineQueue() {
       await saveSession(session)
       synced++
     } catch (err) {
-      // TypeError = network failure → keep in queue
-      // Other errors (auth, API) → discard (user needs to fix config)
-      if (err instanceof TypeError) remaining.push(item)
+      // Netzwerkfehler → in der Queue behalten
+      // Andere Fehler (Auth, Validierung) → verwerfen, User muss eingreifen
+      if (isNetworkError(err)) remaining.push(item)
     }
   }
 

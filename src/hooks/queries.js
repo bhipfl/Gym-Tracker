@@ -179,6 +179,113 @@ export function useDeleteSession() {
   })
 }
 
+// ---------- Coach ----------
+
+export const coachKeys = {
+  clients: ['coach', 'clients'],
+  invitations: ['coach', 'invitations'],
+  clientNotes: (clientId) => ['coach', 'notes', clientId],
+  clientPlans: (clientId) => ['coach', 'clientPlans', clientId],
+  clientSessions: (clientId) => ['coach', 'clientSessions', clientId],
+  clientExerciseNames: (clientId) => ['coach', 'clientExerciseNames', clientId],
+  clientProgress: (clientId, name) => ['coach', 'clientProgress', clientId, name],
+}
+
+export function useClients() {
+  return useQuery({ queryKey: coachKeys.clients, queryFn: api.getClients })
+}
+
+export function useOpenInvitations() {
+  return useQuery({ queryKey: coachKeys.invitations, queryFn: api.getOpenInvitations })
+}
+
+export function useCreateInvitation() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: api.createInvitation,
+    onSettled: () => qc.invalidateQueries({ queryKey: coachKeys.invitations }),
+  })
+}
+
+export function useDeleteInvitation() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: api.deleteInvitation,
+    onSettled: () => qc.invalidateQueries({ queryKey: coachKeys.invitations }),
+  })
+}
+
+export function useClientNotes(clientId) {
+  return useQuery({
+    queryKey: coachKeys.clientNotes(clientId),
+    queryFn: () => api.getClientNotes(clientId),
+    enabled: !!clientId,
+  })
+}
+
+export function useAddClientNote(clientId) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (note) => api.addClientNote(clientId, note),
+    onSettled: () => qc.invalidateQueries({ queryKey: coachKeys.clientNotes(clientId) }),
+  })
+}
+
+export function useDeleteClientNote(clientId) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: api.deleteClientNote,
+    onMutate: async (id) => {
+      await qc.cancelQueries({ queryKey: coachKeys.clientNotes(clientId) })
+      const previous = qc.getQueryData(coachKeys.clientNotes(clientId))
+      qc.setQueryData(coachKeys.clientNotes(clientId), (old = []) => old.filter(n => n.id !== id))
+      return { previous }
+    },
+    onError: (_e, _v, ctx) => ctx?.previous && qc.setQueryData(coachKeys.clientNotes(clientId), ctx.previous),
+    onSettled: () => qc.invalidateQueries({ queryKey: coachKeys.clientNotes(clientId) }),
+  })
+}
+
+export function useClientPlans(clientId) {
+  return useQuery({
+    queryKey: coachKeys.clientPlans(clientId),
+    queryFn: () => api.getClientPlans(clientId),
+    enabled: !!clientId,
+  })
+}
+
+export function useClientSessions(clientId, limit = 20) {
+  return useQuery({
+    queryKey: coachKeys.clientSessions(clientId),
+    queryFn: () => api.getSessions(limit, clientId),
+    enabled: !!clientId,
+  })
+}
+
+export function useClientExerciseNames(clientId) {
+  return useQuery({
+    queryKey: coachKeys.clientExerciseNames(clientId),
+    queryFn: () => api.getUsedExerciseNames(clientId),
+    enabled: !!clientId,
+  })
+}
+
+export function useClientProgress(clientId, exerciseName) {
+  return useQuery({
+    queryKey: coachKeys.clientProgress(clientId, exerciseName),
+    queryFn: () => api.getExerciseProgress(exerciseName, clientId),
+    enabled: !!clientId && !!exerciseName,
+  })
+}
+
+export function useAssignPlanToClient(clientId) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (planId) => api.assignPlanToClient(planId, clientId),
+    onSettled: () => qc.invalidateQueries({ queryKey: coachKeys.clientPlans(clientId) }),
+  })
+}
+
 // Nach erfolgreichem Speichern/Bearbeiten einer Session alles Relevante invalidieren.
 export function useInvalidateAfterSession() {
   const qc = useQueryClient()
