@@ -1,25 +1,26 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getPlans, getSessions } from '../services/api.js'
+import { useQueryClient } from '@tanstack/react-query'
+import { usePlans, useSessions, keys } from '../hooks/queries.js'
 import { getOfflineQueue } from '../services/storage.js'
 import { syncOfflineQueue } from '../services/sync.js'
+import { SkeletonPage } from '../components/Skeleton.jsx'
 import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const [plans, setPlans] = useState([])
-  const [sessions, setSessions] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const qc = useQueryClient()
+  const plansQuery = usePlans()
+  const sessionsQuery = useSessions(5)
   const [offlineCount, setOfflineCount] = useState(getOfflineQueue().length)
   const [syncMsg, setSyncMsg] = useState(null)
 
-  useEffect(() => {
-    Promise.all([getPlans(), getSessions(5)])
-      .then(([p, s]) => { setPlans(p); setSessions(s) })
-      .catch(e => setError(e.message))
-      .finally(() => setLoading(false))
+  const plans = plansQuery.data || []
+  const sessions = sessionsQuery.data || []
+  const loading = (plansQuery.isPending && !plansQuery.data) || (sessionsQuery.isPending && !sessionsQuery.data)
+  const error = plansQuery.error?.message || sessionsQuery.error?.message
 
+  useEffect(() => {
     // Flush offline queue in background
     if (getOfflineQueue().length > 0 && navigator.onLine) {
       syncOfflineQueue().then(({ synced }) => {
@@ -27,19 +28,18 @@ export default function Dashboard() {
           setOfflineCount(getOfflineQueue().length)
           setSyncMsg(`✅ ${synced} Training${synced > 1 ? 's' : ''} synchronisiert`)
           setTimeout(() => setSyncMsg(null), 4000)
-          // Refresh sessions list
-          getSessions(5).then(setSessions).catch(() => {})
+          qc.invalidateQueries({ queryKey: keys.allSessions })
         }
       }).catch(() => {})
     }
-  }, [])
+  }, [qc])
 
   function formatDate(iso) {
     if (!iso) return ''
     return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
   }
 
-  if (loading) return <div className="page"><div className="spinner" /></div>
+  if (loading) return <SkeletonPage count={3} />
 
   return (
     <div className="page">

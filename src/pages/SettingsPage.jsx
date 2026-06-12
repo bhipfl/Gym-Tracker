@@ -8,20 +8,24 @@ export default function SettingsPage() {
   const navigate = useNavigate()
   const [url, setUrl] = useState('')
   const [token, setToken] = useState('')
+  const [restSeconds, setRestSeconds] = useState(90)
   const [status, setStatus] = useState(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const cfg = getConfig()
-    if (cfg) { setUrl(cfg.url || ''); setToken(cfg.token || '') }
+    if (cfg) {
+      setUrl(cfg.url || '')
+      setToken(cfg.token || '')
+      setRestSeconds(Number(cfg.restSeconds) || 90)
+    }
   }, [])
 
   async function handleTest() {
     if (!url) return setStatus({ type: 'error', msg: 'Bitte URL eingeben.' })
     setLoading(true)
     setStatus(null)
-    const tempCfg = { url, token }
-    saveConfig(tempCfg)
+    saveConfig({ ...getConfig(), url, token })
     try {
       await testConnection()
       setStatus({ type: 'success', msg: '✅ Verbindung erfolgreich!' })
@@ -34,7 +38,7 @@ export default function SettingsPage() {
 
   function handleSave() {
     if (!url) return setStatus({ type: 'error', msg: 'Bitte URL eingeben.' })
-    saveConfig({ url, token })
+    saveConfig({ ...getConfig(), url, token, restSeconds: Number(restSeconds) || 90 })
     setStatus({ type: 'success', msg: 'Gespeichert!' })
     setTimeout(() => navigate('/'), 800)
   }
@@ -101,6 +105,24 @@ export default function SettingsPage() {
         )}
       </div>
 
+      <div className="card mt-3">
+        <h3 className="mb-3">⏱ Training</h3>
+        <div className="form-group">
+          <label className="label">Pausen-Timer (Sekunden)</label>
+          <input
+            type="number"
+            min="15"
+            max="600"
+            step="15"
+            value={restSeconds}
+            onChange={e => setRestSeconds(e.target.value)}
+          />
+          <p className="text-xs text-muted mt-2">
+            Startet automatisch, wenn du einen Satz abhakst. Mit „Speichern" übernehmen.
+          </p>
+        </div>
+      </div>
+
       <div className={`card ${styles.help}`}>
         <h3>📖 Setup-Anleitung</h3>
         <ol>
@@ -115,6 +137,10 @@ export default function SettingsPage() {
           Details: <code>apps-script/README.md</code> im Repository
         </p>
       </div>
+
+      <p className="text-xs text-muted mt-3" style={{ textAlign: 'center' }}>
+        Übungsbilder & -daten: <a href="https://wger.de" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>wger.de</a> (CC-BY-SA 4.0)
+      </p>
     </div>
   )
 }

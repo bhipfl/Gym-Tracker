@@ -1,4 +1,5 @@
 import SetRow from './SetRow.jsx'
+import ExerciseImage from './ExerciseImage.jsx'
 import styles from './ActiveExercise.module.css'
 
 export default function ActiveExercise({ exercise, sets, hasLastWeights, onChange, onToggle, onAddSet, onRemoveSet, onFillLast, onRemoveExercise }) {
@@ -8,6 +9,7 @@ export default function ActiveExercise({ exercise, sets, hasLastWeights, onChang
   return (
     <div className={`card ${styles.exercise} ${allDone ? styles.allDone : ''}`}>
       <div className={styles.exHeader}>
+        <ExerciseImage name={exercise.exercise_name} size={44} />
         <div className={styles.exMeta}>
           <div className={styles.exName}>{exercise.exercise_name}</div>
           {exercise.muscle_group && <div className="text-xs text-muted">{exercise.muscle_group}</div>}

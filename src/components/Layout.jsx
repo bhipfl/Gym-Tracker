@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom'
+import { Outlet, NavLink, useLocation } from 'react-router-dom'
 import styles from './Layout.module.css'
 
 const nav = [
@@ -10,9 +10,10 @@ const nav = [
 ]
 
 export default function Layout() {
+  const location = useLocation()
   return (
     <div className={styles.layout}>
-      <main className={styles.main}>
+      <main key={location.pathname} className={`${styles.main} page-transition`}>
         <Outlet />
       </main>
       <nav className={styles.nav}>

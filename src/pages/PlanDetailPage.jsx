@@ -1,95 +1,72 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
-import { getPlanExercises, addExerciseToPlan, removeExerciseFromPlan, updatePlanExercise, reorderPlanExercises, savePlan } from '../services/api.js'
+import { useQueryClient } from '@tanstack/react-query'
+import {
+  usePlanExercises, useAddExerciseToPlan, useRemoveExerciseFromPlan,
+  useUpdatePlanExercise, useReorderPlanExercises, useSavePlan, keys
+} from '../hooks/queries.js'
 import ExercisePicker from '../components/ExercisePicker.jsx'
+import ExerciseImage from '../components/ExerciseImage.jsx'
+import { SkeletonPage } from '../components/Skeleton.jsx'
 import styles from './PlanDetailPage.module.css'
 
 export default function PlanDetailPage() {
   const { id } = useParams()
   const location = useLocation()
   const navigate = useNavigate()
+  const qc = useQueryClient()
   const [plan, setPlan] = useState(location.state?.plan || { id, name: 'Plan' })
 
-  const [exercises, setExercises] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const exercisesQuery = usePlanExercises(id)
+  const addExercise = useAddExerciseToPlan(id)
+  const removeExercise = useRemoveExerciseFromPlan(id)
+  const updateExercise = useUpdatePlanExercise(id)
+  const reorderExercises = useReorderPlanExercises(id)
+  const savePlan = useSavePlan()
+
   const [showPicker, setShowPicker] = useState(false)
   const [editingSets, setEditingSets] = useState(null)
   const [editingName, setEditingName] = useState(false)
   const [planName, setPlanName] = useState(plan.name)
-  const [renaming, setRenaming] = useState(false)
 
-  async function load() {
-    try {
-      setExercises(await getPlanExercises(id))
-    } catch (e) {
-      setError(e.message)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const exercises = exercisesQuery.data || []
+  const error = exercisesQuery.error?.message || addExercise.error?.message
+    || removeExercise.error?.message || updateExercise.error?.message
+    || reorderExercises.error?.message || savePlan.error?.message
 
-  useEffect(() => { load() }, [id])
-
-  async function handleAddExercise(exercise) {
+  function handleAddExercise(exercise) {
     setShowPicker(false)
-    try {
-      await addExerciseToPlan(id, { ...exercise, planId: id })
-      load()
-    } catch (e) {
-      setError(e.message)
-    }
+    addExercise.mutate({ ...exercise, planId: id })
   }
 
-  async function handleRemove(ex) {
+  function handleRemove(ex) {
     if (!confirm(`"${ex.exercise_name}" aus Plan entfernen?`)) return
-    try {
-      await removeExerciseFromPlan(id, ex.id)
-      load()
-    } catch (e) {
-      setError(e.message)
-    }
+    removeExercise.mutate(ex.id)
   }
 
-  async function handleUpdateSets(ex, setsCount) {
+  function handleUpdateSets(ex, setsCount) {
     setEditingSets(null)
-    try {
-      await updatePlanExercise(id, ex.id, { default_sets: setsCount })
-      load()
-    } catch (e) {
-      setError(e.message)
-    }
+    updateExercise.mutate({ exerciseId: ex.id, updates: { default_sets: setsCount } })
   }
 
-  async function handleMove(index, direction) {
+  function handleMove(index, direction) {
     const newList = [...exercises]
     const target = index + direction
     if (target < 0 || target >= newList.length) return
     ;[newList[index], newList[target]] = [newList[target], newList[index]]
-    setExercises(newList)
-    try {
-      await reorderPlanExercises(newList.map((ex, i) => ({ id: ex.id, order: i })))
-    } catch (e) {
-      setError(e.message)
-      load() // revert on error
-    }
+    qc.setQueryData(keys.planExercises(id), newList)
+    reorderExercises.mutate(newList.map((ex, i) => ({ id: ex.id, order: i })))
   }
 
   async function handleRename() {
     if (!planName.trim() || planName === plan.name) { setEditingName(false); return }
-    setRenaming(true)
-    try {
-      await savePlan({ ...plan, name: planName.trim() })
-      setPlan(prev => ({ ...prev, name: planName.trim() }))
-      setEditingName(false)
-    } catch (e) {
-      setError(e.message)
-    } finally {
-      setRenaming(false)
-    }
+    const name = planName.trim()
+    setPlan(prev => ({ ...prev, name }))
+    setEditingName(false)
+    savePlan.mutate({ ...plan, name })
   }
 
-  if (loading) return <div className="page"><div className="spinner" /></div>
+  if (exercisesQuery.isPending && !exercisesQuery.data) return <SkeletonPage count={5} />
 
   return (
     <div className="page">
@@ -106,7 +83,7 @@ export default function PlanDetailPage() {
               autoFocus
               className={styles.renameInput}
             />
-            <button className="btn btn-primary btn-sm" onClick={handleRename} disabled={renaming}>✓</button>
+            <button className="btn btn-primary btn-sm" onClick={handleRename}>✓</button>
             <button className="btn btn-ghost btn-sm" onClick={() => { setPlanName(plan.name); setEditingName(false) }}>✕</button>
           </div>
         ) : (
@@ -146,7 +123,7 @@ export default function PlanDetailPage() {
       ) : (
         <div className={styles.list}>
           {exercises.map((ex, i) => (
-            <div key={ex.id} className={`card ${styles.exCard}`}>
+            <div key={ex.id} className={`card ${styles.exCard}`} style={ex._pending ? { opacity: 0.6 } : undefined}>
               <div className={styles.reorderBtns}>
                 <button
                   className={styles.moveBtn}
@@ -161,6 +138,8 @@ export default function PlanDetailPage() {
                   aria-label="Nach unten"
                 >▼</button>
               </div>
+
+              <ExerciseImage name={ex.exercise_name} size={40} />
 
               <div className={styles.exInfo}>
                 <div className={styles.exName}>{ex.exercise_name}</div>

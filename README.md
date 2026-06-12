@@ -11,6 +11,17 @@ npm run build    # Production-Build nach dist/
 npm run preview  # Build lokal testen
 ```
 
+## Übungsbilder (wger)
+
+Die App zeigt Übungsbilder aus der offenen [wger](https://wger.de)-Übungsdatenbank (deutsche Namen, Lizenz **CC-BY-SA 4.0**, Attribution wird pro Bild in der App angezeigt). Die Daten werden gebündelt, nicht zur Laufzeit abgerufen:
+
+```bash
+npm i -D sharp                          # optional, für kleine WebP-Bilder
+node scripts/build-exercise-db.mjs      # lädt Übungen + Bilder von wger.de
+```
+
+Das Skript schreibt `src/data/exercises.de.json` und `public/exercise-images/` — beides committen, damit die Bilder mit deployt werden. Ohne diesen Schritt läuft die App normal, nur ohne Bilder.
+
 ## Backend einrichten
 
 Siehe [`apps-script/README.md`](apps-script/README.md) — Google Sheet + Apps Script anlegen, als Web App deployen, dann URL + Token in der App unter **Einstellungen** eingeben. Keine Credentials liegen im Code; sie werden nur im `localStorage` des Browsers gespeichert.

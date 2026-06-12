@@ -195,6 +195,19 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+.page-transition {
+  animation: fadeSlideIn 0.15s ease-out;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition { animation: none; }
+}
+
 .divider {
   height: 1px;
   background: var(--border);

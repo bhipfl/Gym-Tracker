@@ -1,68 +1,29 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getSessions, getSessionSets, deleteSession } from '../services/api.js'
+import { useSessions, useSessionSets, useDeleteSession } from '../hooks/queries.js'
+import { SkeletonPage } from '../components/Skeleton.jsx'
 import styles from './HistoryPage.module.css'
 
 export default function HistoryPage() {
   const navigate = useNavigate()
-  const [sessions, setSessions] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const sessionsQuery = useSessions(100)
+  const deleteSession = useDeleteSession()
   const [expanded, setExpanded] = useState(null)
-  const [sets, setSets] = useState({})
-  const [loadingSets, setLoadingSets] = useState(null)
-  const [deleting, setDeleting] = useState(null)
 
-  useEffect(() => {
-    getSessions(100)
-      .then(setSessions)
-      .catch(e => setError(e.message))
-      .finally(() => setLoading(false))
-  }, [])
+  const sessions = sessionsQuery.data || []
+  const error = sessionsQuery.error?.message || deleteSession.error?.message
 
-  async function toggleExpand(session) {
-    if (expanded === session.id) { setExpanded(null); return }
-    setExpanded(session.id)
-    if (!sets[session.id]) {
-      setLoadingSets(session.id)
-      try {
-        const s = await getSessionSets(session.id)
-        setSets(prev => ({ ...prev, [session.id]: s }))
-      } catch (_) {}
-      setLoadingSets(null)
-    }
+  function toggleExpand(session) {
+    setExpanded(expanded === session.id ? null : session.id)
   }
 
-  async function handleDelete(session) {
+  function handleDelete(session) {
     if (!confirm(`Training vom ${formatDate(session.date)} wirklich löschen?`)) return
-    setDeleting(session.id)
-    try {
-      await deleteSession(session.id)
-      setSessions(prev => prev.filter(s => s.id !== session.id))
-      if (expanded === session.id) setExpanded(null)
-    } catch (e) {
-      setError(e.message)
-    } finally {
-      setDeleting(null)
-    }
+    if (expanded === session.id) setExpanded(null)
+    deleteSession.mutate(session.id)
   }
 
-  function formatDate(iso) {
-    if (!iso) return ''
-    const d = new Date(iso)
-    return d.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })
-  }
-
-  function groupSets(sets) {
-    const grouped = {}
-    sets.forEach(s => {
-      if (!grouped[s.exercise_name]) grouped[s.exercise_name] = []
-      grouped[s.exercise_name].push(s)
-    })
-    return grouped
-  }
-
-  if (loading) return <div className="page"><div className="spinner" /></div>
+  if (sessionsQuery.isPending && !sessionsQuery.data) return <SkeletonPage count={6} />
 
   return (
     <div className="page">
@@ -88,43 +49,12 @@ export default function HistoryPage() {
               </button>
 
               {expanded === session.id && (
-                <div className={styles.detail}>
-                  {session.notes && (
-                    <div className={styles.sessionNotes}>💬 {session.notes}</div>
-                  )}
-                  {loadingSets === session.id ? (
-                    <div className="text-sm text-muted">Lade...</div>
-                  ) : sets[session.id]?.length > 0 ? (
-                    Object.entries(groupSets(sets[session.id])).map(([name, exSets]) => (
-                      <div key={name} className={styles.exGroup}>
-                        <div className={styles.exName}>{name}</div>
-                        {exSets.sort((a, b) => Number(a.set_number) - Number(b.set_number)).map((s, i) => (
-                          <div key={i} className={styles.setLine}>
-                            Satz {s.set_number}: {s.weight} kg × {s.reps} Wdh
-                          </div>
-                        ))}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-sm text-muted">Keine Sets aufgezeichnet.</div>
-                  )}
-
-                  <div className={styles.detailActions}>
-                    <button
-                      className="btn btn-secondary btn-sm"
-                      onClick={() => navigate(`/edit-session/${session.id}`, { state: { session } })}
-                    >
-                      ✏️ Bearbeiten
-                    </button>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDelete(session)}
-                      disabled={deleting === session.id}
-                    >
-                      {deleting === session.id ? '...' : '🗑️ Löschen'}
-                    </button>
-                  </div>
-                </div>
+                <SessionDetail
+                  session={session}
+                  onEdit={() => navigate(`/edit-session/${session.id}`, { state: { session } })}
+                  onDelete={() => handleDelete(session)}
+                  deleting={deleteSession.isPending && deleteSession.variables === session.id}
+                />
               )}
             </div>
           ))}
@@ -132,4 +62,57 @@ export default function HistoryPage() {
       )}
     </div>
   )
+}
+
+function SessionDetail({ session, onEdit, onDelete, deleting }) {
+  const setsQuery = useSessionSets(session.id)
+  const sets = setsQuery.data || []
+
+  return (
+    <div className={styles.detail}>
+      {session.notes && (
+        <div className={styles.sessionNotes}>💬 {session.notes}</div>
+      )}
+      {setsQuery.isPending ? (
+        <div className="text-sm text-muted">Lade...</div>
+      ) : sets.length > 0 ? (
+        Object.entries(groupSets(sets)).map(([name, exSets]) => (
+          <div key={name} className={styles.exGroup}>
+            <div className={styles.exName}>{name}</div>
+            {exSets.sort((a, b) => Number(a.set_number) - Number(b.set_number)).map((s, i) => (
+              <div key={i} className={styles.setLine}>
+                Satz {s.set_number}: {s.weight} kg × {s.reps} Wdh
+              </div>
+            ))}
+          </div>
+        ))
+      ) : (
+        <div className="text-sm text-muted">Keine Sets aufgezeichnet.</div>
+      )}
+
+      <div className={styles.detailActions}>
+        <button className="btn btn-secondary btn-sm" onClick={onEdit}>
+          ✏️ Bearbeiten
+        </button>
+        <button className="btn btn-danger btn-sm" onClick={onDelete} disabled={deleting}>
+          {deleting ? '...' : '🗑️ Löschen'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function groupSets(sets) {
+  const grouped = {}
+  sets.forEach(s => {
+    if (!grouped[s.exercise_name]) grouped[s.exercise_name] = []
+    grouped[s.exercise_name].push(s)
+  })
+  return grouped
+}
+
+function formatDate(iso) {
+  if (!iso) return ''
+  const d = new Date(iso)
+  return d.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })
 }

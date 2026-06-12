@@ -1,47 +1,33 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getPlans, savePlan, deletePlan } from '../services/api.js'
+import { usePlans, useSavePlan, useDeletePlan } from '../hooks/queries.js'
 import PlanForm from '../components/PlanForm.jsx'
+import { SkeletonPage } from '../components/Skeleton.jsx'
 import styles from './PlansPage.module.css'
 
 export default function PlansPage() {
   const navigate = useNavigate()
-  const [plans, setPlans] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const plansQuery = usePlans()
+  const savePlan = useSavePlan()
+  const deletePlan = useDeletePlan()
   const [showForm, setShowForm] = useState(false)
   const [editPlan, setEditPlan] = useState(null)
 
-  async function load() {
-    try {
-      setPlans(await getPlans())
-    } catch (e) {
-      setError(e.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => { load() }, [])
+  const plans = plansQuery.data || []
+  const error = plansQuery.error?.message || savePlan.error?.message || deletePlan.error?.message
 
   async function handleSave(data) {
-    await savePlan(data)
     setShowForm(false)
     setEditPlan(null)
-    load()
+    savePlan.mutate(data)
   }
 
-  async function handleDelete(plan) {
+  function handleDelete(plan) {
     if (!confirm(`Plan "${plan.name}" wirklich löschen?`)) return
-    try {
-      await deletePlan(plan.id)
-      load()
-    } catch (e) {
-      setError(e.message)
-    }
+    deletePlan.mutate(plan.id)
   }
 
-  if (loading) return <div className="page"><div className="spinner" /></div>
+  if (plansQuery.isPending && !plansQuery.data) return <SkeletonPage />
 
   return (
     <div className="page">

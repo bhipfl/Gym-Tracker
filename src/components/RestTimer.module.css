@@ -1,0 +1,59 @@
+.bar {
+  position: relative;
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.bar.done {
+  background: rgba(76, 175, 80, 0.15);
+}
+
+.progress {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: rgba(233, 69, 96, 0.18);
+  transition: width 0.25s linear;
+}
+
+.content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.time {
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  flex: 1;
+}
+
+.done .label { color: var(--success); flex: 1; }
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.timerBtn {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 36px;
+}
+.timerBtn:active { background: var(--border); }

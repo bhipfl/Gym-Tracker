@@ -31,8 +31,18 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        globPatterns: ['**/*.{js,css,html,ico,svg}', 'icons/*.png'],
         runtimeCaching: [
+          {
+            // Übungsbilder: nach erstem Abruf offline verfügbar, nicht im Precache
+            urlPattern: ({ url }) => url.pathname.startsWith(`${base}exercise-images/`),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'exercise-images',
+              expiration: { maxEntries: 300, maxAgeSeconds: 30 * 24 * 3600 },
+              cacheableResponse: { statuses: [0, 200] }
+            }
+          },
           {
             urlPattern: /^https:\/\/script\.google\.com\/.*/i,
             handler: 'NetworkFirst',

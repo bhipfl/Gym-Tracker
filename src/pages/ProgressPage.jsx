@@ -1,35 +1,17 @@
 import { useEffect, useState, useRef } from 'react'
-import { getExerciseProgress, getUsedExerciseNames } from '../services/api.js'
+import { useUsedExerciseNames, useExerciseProgress } from '../hooks/queries.js'
 import ProgressChart from '../components/ProgressChart.jsx'
+import { SkeletonCard } from '../components/Skeleton.jsx'
 import styles from './ProgressPage.module.css'
 
 export default function ProgressPage() {
-  const [exerciseNames, setExerciseNames] = useState([])
   const [selected, setSelected] = useState(null)
-  const [progress, setProgress] = useState([])
-  const [chartLoading, setChartLoading] = useState(false)
-  const [namesLoading, setNamesLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const namesQuery = useUsedExerciseNames()
+  const progressQuery = useExerciseProgress(selected)
 
-  useEffect(() => {
-    getUsedExerciseNames()
-      .then(setExerciseNames)
-      .catch(() => {})
-      .finally(() => setNamesLoading(false))
-  }, [])
-
-  async function handleSelect(name) {
-    setSelected(name)
-    setChartLoading(true)
-    setError(null)
-    try {
-      setProgress(await getExerciseProgress(name))
-    } catch (e) {
-      setError(e.message)
-    } finally {
-      setChartLoading(false)
-    }
-  }
+  const exerciseNames = namesQuery.data || []
+  const progress = progressQuery.data || []
+  const error = progressQuery.error?.message
 
   return (
     <div className="page">
@@ -38,23 +20,25 @@ export default function ProgressPage() {
 
       <div className="form-group">
         <label className="label">Übung auswählen</label>
-        <ExerciseSearch names={exerciseNames} loading={namesLoading} onSelect={handleSelect} selected={selected} />
+        <ExerciseSearch names={exerciseNames} loading={namesQuery.isPending && !namesQuery.data} onSelect={setSelected} selected={selected} />
       </div>
 
       {selected && (
-        <div className="card mt-3">
-          <h2 className={styles.chartTitle}>{selected}</h2>
-          <p className="text-xs text-muted mb-3">Maximales Gewicht pro Training</p>
-          {chartLoading ? (
-            <div className="spinner" />
-          ) : progress.length < 2 ? (
-            <div className="empty-state" style={{ padding: '24px 0' }}>
-              <p>Mindestens 2 Trainings mit dieser Übung nötig.</p>
-            </div>
-          ) : (
-            <ProgressChart data={progress} />
-          )}
-        </div>
+        progressQuery.isPending && !progressQuery.data ? (
+          <div className="mt-3"><SkeletonCard lines={4} /></div>
+        ) : (
+          <div className="card mt-3">
+            <h2 className={styles.chartTitle}>{selected}</h2>
+            <p className="text-xs text-muted mb-3">Maximales Gewicht pro Training</p>
+            {progress.length < 2 ? (
+              <div className="empty-state" style={{ padding: '24px 0' }}>
+                <p>Mindestens 2 Trainings mit dieser Übung nötig.</p>
+              </div>
+            ) : (
+              <ProgressChart data={progress} />
+            )}
+          </div>
+        )
       )}
 
       {!selected && (
