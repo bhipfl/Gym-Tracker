@@ -1,1 +1,899 @@
-[]
+[
+ {
+  "id": 1012,
+  "name": "Abwechselnde Bizepscurls",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/1012.webp",
+  "author": "Franpol",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/1012/view/"
+ },
+ {
+  "id": 12,
+  "name": "Adduktoren-Maschine",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/12.webp",
+  "author": "flori",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/12/view/"
+ },
+ {
+  "id": 984,
+  "name": "Ausfallschritte",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/984.webp",
+  "author": "Franpol",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/984/view/"
+ },
+ {
+  "id": 206,
+  "name": "Ausfallschritte im Gehen",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/206.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/206/view/"
+ },
+ {
+  "id": 31,
+  "name": "Axe Hold",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/31.webp",
+  "author": "GrosseHund",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/31/view/"
+ },
+ {
+  "id": 76,
+  "name": "Bankdrücken Eng",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/76.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/76/view/"
+ },
+ {
+  "id": 75,
+  "name": "Bankdrücken KH",
+  "aliases": [],
+  "muscle": "Brust",
+  "image": "exercise-images/75.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/75/view/"
+ },
+ {
+  "id": 73,
+  "name": "Bankdrücken LH",
+  "aliases": [],
+  "muscle": "Brust",
+  "image": "exercise-images/73.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/73/view/"
+ },
+ {
+  "id": 365,
+  "name": "Beinbeuger Liegend",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/365.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/365/view/"
+ },
+ {
+  "id": 367,
+  "name": "Beinbeuger Stehend",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/367.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/367/view/"
+ },
+ {
+  "id": 377,
+  "name": "Beinheben Liegend",
+  "aliases": [],
+  "muscle": "Bauch",
+  "image": "exercise-images/377.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/377/view/"
+ },
+ {
+  "id": 371,
+  "name": "Beinpresse",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/371.webp",
+  "author": "BFad07",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/371/view/"
+ },
+ {
+  "id": 373,
+  "name": "Beinpresse Eng",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/373.webp",
+  "author": "Franpol",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/373/view/"
+ },
+ {
+  "id": 851,
+  "name": "Beinstrecker",
+  "aliases": [
+   "Leg Extension"
+  ],
+  "muscle": "Beine",
+  "image": "exercise-images/851.webp",
+  "author": "enros7500",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/851/view/"
+ },
+ {
+  "id": 95,
+  "name": "Bizeps am Kabel",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/95.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/95/view/"
+ },
+ {
+  "id": 94,
+  "name": "Bizeps Curls Mit SZ-Stange",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/94.webp",
+  "author": "Franpol",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/94/view/"
+ },
+ {
+  "id": 92,
+  "name": "Bizeps KH-Curls",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/92.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/92/view/"
+ },
+ {
+  "id": 91,
+  "name": "Bizeps LH-Curls",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/91.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/91/view/"
+ },
+ {
+  "id": 1000,
+  "name": "Bodensenken",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/1000.webp",
+  "author": "Franpol",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/1000/view/"
+ },
+ {
+  "id": 129,
+  "name": "Brustpresse",
+  "aliases": [],
+  "muscle": "Brust",
+  "image": "exercise-images/129.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/129/view/"
+ },
+ {
+  "id": 988,
+  "name": "Bulgarische geteilte Kniebeugen links",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/988.webp",
+  "author": "Franpol",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/988/view/"
+ },
+ {
+  "id": 135,
+  "name": "Butterfly",
+  "aliases": [],
+  "muscle": "Brust",
+  "image": "exercise-images/135.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/135/view/"
+ },
+ {
+  "id": 1922,
+  "name": "Butterfly am Kabelzug",
+  "aliases": [],
+  "muscle": "Brust",
+  "image": "exercise-images/1922.webp",
+  "author": "shushu",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/1922/view/"
+ },
+ {
+  "id": 154,
+  "name": "Chin-ups",
+  "aliases": [],
+  "muscle": "Rücken",
+  "image": "exercise-images/154.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/154/view/"
+ },
+ {
+  "id": 167,
+  "name": "Crunches",
+  "aliases": [],
+  "muscle": "Bauch",
+  "image": "exercise-images/167.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/167/view/"
+ },
+ {
+  "id": 427,
+  "name": "Crunches an Negativbank",
+  "aliases": [],
+  "muscle": "Bauch",
+  "image": "exercise-images/427.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/427/view/"
+ },
+ {
+  "id": 171,
+  "name": "Crunches an Schrägbank",
+  "aliases": [],
+  "muscle": "Bauch",
+  "image": "exercise-images/171.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/171/view/"
+ },
+ {
+  "id": 194,
+  "name": "Dips",
+  "aliases": [],
+  "muscle": "Brust",
+  "image": "exercise-images/194.webp",
+  "author": "cshep442",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/194/view/"
+ },
+ {
+  "id": 197,
+  "name": "Dips Zwischen 2 Bänke",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/197.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/197/view/"
+ },
+ {
+  "id": 456,
+  "name": "Einbeinige Kniebeuge",
+  "aliases": [
+   "Pistol squat"
+  ],
+  "muscle": "Beine",
+  "image": "exercise-images/456.webp",
+  "author": "wakanda90",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/456/view/"
+ },
+ {
+  "id": 238,
+  "name": "Fliegende KH Flachbank",
+  "aliases": [],
+  "muscle": "Brust",
+  "image": "exercise-images/238.webp",
+  "author": "cshep442",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/238/view/"
+ },
+ {
+  "id": 246,
+  "name": "Frenchpress SZ-Stange",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/246.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/246/view/"
+ },
+ {
+  "id": 257,
+  "name": "Front Kniebeuge",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/257.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/257/view/"
+ },
+ {
+  "id": 256,
+  "name": "Frontheben am Kabel",
+  "aliases": [],
+  "muscle": "Schultern",
+  "image": "exercise-images/256.webp",
+  "author": "philip",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/256/view/"
+ },
+ {
+  "id": 268,
+  "name": "Good Mornings",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/268.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/268/view/"
+ },
+ {
+  "id": 1567,
+  "name": "Hammercurl mit Kurzhanteln, abwechselnd",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/1567.webp",
+  "author": "Mariano_O",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/1567/view/"
+ },
+ {
+  "id": 272,
+  "name": "Hammercurls",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/272.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/272/view/"
+ },
+ {
+  "id": 275,
+  "name": "Hammercurls am Seil",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/275.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/275/view/"
+ },
+ {
+  "id": 320,
+  "name": "Hampelmann",
+  "aliases": [
+   "Hampelmänner",
+   "Jumping Jack"
+  ],
+  "muscle": "Beine",
+  "image": "exercise-images/320.webp",
+  "author": "student1234",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/320/view/"
+ },
+ {
+  "id": 1387,
+  "name": "Hamstring-Kicks",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/1387.webp",
+  "author": "captive0592",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/1387/view/"
+ },
+ {
+  "id": 51,
+  "name": "Handgelenkstreckung",
+  "aliases": [
+   "Kurzhantel-Unterarmcurl"
+  ],
+  "muscle": "Arme",
+  "image": "exercise-images/51.webp",
+  "author": "burenl",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/51/view/"
+ },
+ {
+  "id": 454,
+  "name": "Hecht-Liegestütze",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/454.webp",
+  "author": "Nash",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/454/view/"
+ },
+ {
+  "id": 301,
+  "name": "Hyperextensions",
+  "aliases": [],
+  "muscle": "Rücken",
+  "image": "exercise-images/301.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/301/view/"
+ },
+ {
+  "id": 323,
+  "name": "Kabelcross",
+  "aliases": [
+   "Kabelziehen Über Kreuz"
+  ],
+  "muscle": "Brust",
+  "image": "exercise-images/323.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/323/view/"
+ },
+ {
+  "id": 1003,
+  "name": "Kettlebell Kreuzheben",
+  "aliases": [],
+  "muscle": "Rücken",
+  "image": "exercise-images/1003.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/1003/view/"
+ },
+ {
+  "id": 465,
+  "name": "KH an Scottmaschine",
+  "aliases": [
+   "Scott Curls",
+   "Preacher Curls"
+  ],
+  "muscle": "Arme",
+  "image": "exercise-images/465.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/465/view/"
+ },
+ {
+  "id": 1002,
+  "name": "Kinderpose",
+  "aliases": [],
+  "muscle": "Rücken",
+  "image": "exercise-images/1002.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/1002/view/"
+ },
+ {
+  "id": 475,
+  "name": "Klimmzüge",
+  "aliases": [],
+  "muscle": "Rücken",
+  "image": "exercise-images/475.webp",
+  "author": "Imobard",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/475/view/"
+ },
+ {
+  "id": 983,
+  "name": "Knie hoch",
+  "aliases": [],
+  "muscle": "Cardio",
+  "image": "exercise-images/983.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/983/view/"
+ },
+ {
+  "id": 375,
+  "name": "Kniebeuge an Hackenschmidtmaschine",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/375.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/375/view/"
+ },
+ {
+  "id": 990,
+  "name": "Kniende Rückschläge",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/990.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/990/view/"
+ },
+ {
+  "id": 1007,
+  "name": "Kopf drehen",
+  "aliases": [],
+  "muscle": "Schultern",
+  "image": "exercise-images/1007.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/1007/view/"
+ },
+ {
+  "id": 1018,
+  "name": "Kopf neigen",
+  "aliases": [],
+  "muscle": "Rücken",
+  "image": "exercise-images/1018.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/1018/view/"
+ },
+ {
+  "id": 184,
+  "name": "Kreuzheben",
+  "aliases": [
+   "Deadlift"
+  ],
+  "muscle": "Rücken",
+  "image": "exercise-images/184.webp",
+  "author": "philip",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/184/view/"
+ },
+ {
+  "id": 158,
+  "name": "Latzug Eng",
+  "aliases": [
+   "Lat Pulldown Eng",
+   "Lat ziehen eng"
+  ],
+  "muscle": "Rücken",
+  "image": "exercise-images/158.webp",
+  "author": "tuckerm",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/158/view/"
+ },
+ {
+  "id": 394,
+  "name": "Long-Pulley",
+  "aliases": [],
+  "muscle": "Rücken",
+  "image": "exercise-images/394.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/394/view/"
+ },
+ {
+  "id": 185,
+  "name": "Negativ Bankdrücken",
+  "aliases": [],
+  "muscle": "Brust",
+  "image": "exercise-images/185.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/185/view/"
+ },
+ {
+  "id": 458,
+  "name": "Plank",
+  "aliases": [
+   "Unterarmstütze"
+  ],
+  "muscle": "Bauch",
+  "image": "exercise-images/458.webp",
+  "author": "utkb",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/458/view/"
+ },
+ {
+  "id": 161,
+  "name": "Pull-Over KH",
+  "aliases": [
+   "KH Überzüge"
+  ],
+  "muscle": "Brust",
+  "image": "exercise-images/161.webp",
+  "author": "powerade69",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/161/view/"
+ },
+ {
+  "id": 691,
+  "name": "Rudern Aufrecht MP",
+  "aliases": [],
+  "muscle": "Schultern",
+  "image": "exercise-images/691.webp",
+  "author": "anto.kreegyr",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/691/view/"
+ },
+ {
+  "id": 693,
+  "name": "Rudern Aufrecht ß-Stange",
+  "aliases": [],
+  "muscle": "Schultern",
+  "image": "exercise-images/693.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/693/view/"
+ },
+ {
+  "id": 81,
+  "name": "Rudern Einarmig KH",
+  "aliases": [
+   "KH Rudern"
+  ],
+  "muscle": "Rücken",
+  "image": "exercise-images/81.webp",
+  "author": "Franpol",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/81/view/"
+ },
+ {
+  "id": 512,
+  "name": "Rudern Sitzend, Eng",
+  "aliases": [],
+  "muscle": "Rücken",
+  "image": "exercise-images/512.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/512/view/"
+ },
+ {
+  "id": 83,
+  "name": "Rudern Vorgebeugt LH",
+  "aliases": [],
+  "muscle": "Rücken",
+  "image": "exercise-images/83.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/83/view/"
+ },
+ {
+  "id": 84,
+  "name": "Rudern Vorgebeugt LH Reverse",
+  "aliases": [],
+  "muscle": "Rücken",
+  "image": "exercise-images/84.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/84/view/"
+ },
+ {
+  "id": 537,
+  "name": "Schrägbankdrücken KH",
+  "aliases": [],
+  "muscle": "Brust",
+  "image": "exercise-images/537.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/537/view/"
+ },
+ {
+  "id": 538,
+  "name": "Schrägbankdrücken LH",
+  "aliases": [],
+  "muscle": "Brust",
+  "image": "exercise-images/538.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/538/view/"
+ },
+ {
+  "id": 539,
+  "name": "Schrägbankdrücken MP",
+  "aliases": [],
+  "muscle": "Brust",
+  "image": "exercise-images/539.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/539/view/"
+ },
+ {
+  "id": 567,
+  "name": "Schulterdrücken KH",
+  "aliases": [
+   "Military Press KH"
+  ],
+  "muscle": "Schultern",
+  "image": "exercise-images/567.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/567/view/"
+ },
+ {
+  "id": 566,
+  "name": "Schulterdrücken LH",
+  "aliases": [
+   "Military Press LH"
+  ],
+  "muscle": "Schultern",
+  "image": "exercise-images/566.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/566/view/"
+ },
+ {
+  "id": 543,
+  "name": "Schultermaschine",
+  "aliases": [],
+  "muscle": "Schultern",
+  "image": "exercise-images/543.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/543/view/"
+ },
+ {
+  "id": 570,
+  "name": "Schulterzucken",
+  "aliases": [],
+  "muscle": "Schultern",
+  "image": "exercise-images/570.webp",
+  "author": "BFad07",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/570/view/"
+ },
+ {
+  "id": 349,
+  "name": "Seitheben am Kabel, Einarmig",
+  "aliases": [],
+  "muscle": "Schultern",
+  "image": "exercise-images/349.webp",
+  "author": "philip",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/349/view/"
+ },
+ {
+  "id": 348,
+  "name": "Seitheben KH",
+  "aliases": [
+   "Seitenheben"
+  ],
+  "muscle": "Schultern",
+  "image": "exercise-images/348.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/348/view/"
+ },
+ {
+  "id": 572,
+  "name": "Shrugs KH",
+  "aliases": [
+   "Schulterheben KH"
+  ],
+  "muscle": "Schultern",
+  "image": "exercise-images/572.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/572/view/"
+ },
+ {
+  "id": 571,
+  "name": "Shrugs LH",
+  "aliases": [
+   "Schulterheben LH"
+  ],
+  "muscle": "Schultern",
+  "image": "exercise-images/571.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/571/view/"
+ },
+ {
+  "id": 1479,
+  "name": "Sit-Ups (Ellenbogen zum Knie)",
+  "aliases": [],
+  "muscle": "Bauch",
+  "image": "exercise-images/1479.webp",
+  "author": "Moffi",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/1479/view/"
+ },
+ {
+  "id": 804,
+  "name": "Sloper hängen",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/804.webp",
+  "author": "marcelbader",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/804/view/"
+ },
+ {
+  "id": 981,
+  "name": "Steigungen",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/981.webp",
+  "author": "wger.de",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/981/view/"
+ },
+ {
+  "id": 630,
+  "name": "Sumo Kreuzheben",
+  "aliases": [
+   "Sumo Deadlift"
+  ],
+  "muscle": "Beine",
+  "image": "exercise-images/630.webp",
+  "author": "magdy",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/630/view/"
+ },
+ {
+  "id": 513,
+  "name": "T-Bar Rudern (breit)",
+  "aliases": [],
+  "muscle": "Rücken",
+  "image": "exercise-images/513.webp",
+  "author": "Everkinetic",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/513/view/"
+ },
+ {
+  "id": 659,
+  "name": "Trizeps Seildrücken",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/659.webp",
+  "author": "Franpol",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/659/view/"
+ },
+ {
+  "id": 50,
+  "name": "Trizepsdrücken KH Über Kopf",
+  "aliases": [],
+  "muscle": "Arme",
+  "image": "exercise-images/50.webp",
+  "author": "Franpol",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/50/view/"
+ },
+ {
+  "id": 999,
+  "name": "Umgekehrte Ausfallschritte",
+  "aliases": [],
+  "muscle": "Beine",
+  "image": "exercise-images/999.webp",
+  "author": "philip",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/999/view/"
+ },
+ {
+  "id": 146,
+  "name": "Wadendrücken an Beinpresse",
+  "aliases": [],
+  "muscle": "Waden",
+  "image": "exercise-images/146.webp",
+  "author": "nate303303",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/146/view/"
+ },
+ {
+  "id": 622,
+  "name": "Wadenheben Stehend",
+  "aliases": [],
+  "muscle": "Waden",
+  "image": "exercise-images/622.webp",
+  "author": "clafal",
+  "license": "CC-BY-SA 4.0",
+  "sourceUrl": "https://wger.de/de/exercise/622/view/"
+ }
+]
