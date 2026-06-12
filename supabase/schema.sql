@@ -40,11 +40,12 @@ create table public.coach_clients (
 create table public.invitations (
   id uuid primary key default gen_random_uuid(),
   coach_id uuid not null references public.profiles(id) on delete cascade,
-  code text not null unique default encode(gen_random_bytes(9), 'base64url'),
+  -- Hinweis: Postgres' encode() kennt kein 'base64url', daher translate()
+  code text not null unique default translate(encode(gen_random_bytes(9), 'base64'), '+/', '-_'),
   email text,
   created_at timestamptz not null default now(),
   expires_at timestamptz not null default now() + interval '14 days',
-  accepted_by uuid references public.profiles(id)
+  accepted_by uuid references public.profiles(id) on delete set null
 );
 
 create table public.exercises (

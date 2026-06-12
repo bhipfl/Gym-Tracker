@@ -375,11 +375,18 @@ export async function removeClient(clientId) {
   return { ok: true }
 }
 
+// Code wird clientseitig erzeugt statt per DB-Default — robust gegen
+// Schema-Varianten und spart die Abhängigkeit vom Default-Ausdruck.
+function generateInviteCode() {
+  const bytes = crypto.getRandomValues(new Uint8Array(12))
+  return btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
 export async function createInvitation(email) {
   const uid = await currentUserId()
   const { data, error } = await supabase
     .from('invitations')
-    .insert({ coach_id: uid, email: nul(email) })
+    .insert({ coach_id: uid, email: nul(email), code: generateInviteCode() })
     .select()
     .single()
   throwIf(error)
