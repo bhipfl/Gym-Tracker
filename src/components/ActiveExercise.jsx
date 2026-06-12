@@ -1,3 +1,4 @@
+import { X, Check, Plus, Minus, RotateCcw } from 'lucide-react'
 import SetRow from './SetRow.jsx'
 import ExerciseImage from './ExerciseImage.jsx'
 import styles from './ActiveExercise.module.css'
@@ -16,15 +17,15 @@ export default function ActiveExercise({ exercise, sets, hasLastWeights, onChang
         </div>
         <div className={styles.exActions}>
           {hasLastWeights && (
-            <button className={styles.fillBtn} onClick={onFillLast} title="Letzte Werte übernehmen">
-              ↩
+            <button className={styles.fillBtn} onClick={onFillLast} title="Letzte Werte übernehmen" aria-label="Letzte Werte übernehmen">
+              <RotateCcw size={16} />
             </button>
           )}
           <div className={`${styles.exProgress} ${allDone ? styles.done : ''}`}>
             {doneSets}/{sets.length}
           </div>
-          <button className={styles.removeExBtn} onClick={onRemoveExercise} title="Übung entfernen">
-            ✕
+          <button className={styles.removeExBtn} onClick={onRemoveExercise} title="Übung entfernen" aria-label="Übung entfernen">
+            <X size={16} />
           </button>
         </div>
       </div>
@@ -33,7 +34,7 @@ export default function ActiveExercise({ exercise, sets, hasLastWeights, onChang
         <span>Satz</span>
         <span>Gewicht (kg)</span>
         <span>Wdh</span>
-        <span>✓</span>
+        <span><Check size={13} aria-label="abgehakt" /></span>
       </div>
 
       <div className={styles.sets}>
@@ -50,10 +51,10 @@ export default function ActiveExercise({ exercise, sets, hasLastWeights, onChang
 
       <div className={styles.setActions}>
         <button className="btn btn-ghost btn-sm" onClick={onRemoveSet} disabled={sets.length <= 1}>
-          − Satz
+          <Minus size={14} /> Satz
         </button>
         <button className="btn btn-ghost btn-sm" onClick={onAddSet}>
-          + Satz
+          <Plus size={14} /> Satz
         </button>
       </div>
     </div>

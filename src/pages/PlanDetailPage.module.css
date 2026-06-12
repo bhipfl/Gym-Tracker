@@ -52,7 +52,15 @@
 .moveBtn:disabled { opacity: 0.25; cursor: not-allowed; }
 
 .exInfo { flex: 1; min-width: 0; }
-.exName { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.exName {
+  font-weight: 600;
+  font-size: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.3;
+}
 
 .exRight { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 

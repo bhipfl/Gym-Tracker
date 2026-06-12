@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Calendar, ChevronUp, ChevronDown, MessageSquare, Pencil, Trash2 } from 'lucide-react'
 import { useSessions, useSessionSets, useDeleteSession } from '../hooks/queries.js'
 import { SkeletonPage } from '../components/Skeleton.jsx'
 import styles from './HistoryPage.module.css'
@@ -32,7 +33,7 @@ export default function HistoryPage() {
 
       {sessions.length === 0 ? (
         <div className="empty-state">
-          <div className="icon">📅</div>
+          <div className="icon"><Calendar size={48} strokeWidth={1.5} /></div>
           <h3>Noch kein Training</h3>
           <p>Starte dein erstes Training über die Pläne.</p>
         </div>
@@ -45,7 +46,7 @@ export default function HistoryPage() {
                   <div className={styles.sessionName}>{session.plan_name || 'Training'}</div>
                   <div className="text-xs text-muted">{formatDate(session.date)}</div>
                 </div>
-                <span className={styles.arrow}>{expanded === session.id ? '▲' : '▼'}</span>
+                <span className={styles.arrow}>{expanded === session.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}</span>
               </button>
 
               {expanded === session.id && (
@@ -71,7 +72,7 @@ function SessionDetail({ session, onEdit, onDelete, deleting }) {
   return (
     <div className={styles.detail}>
       {session.notes && (
-        <div className={styles.sessionNotes}>💬 {session.notes}</div>
+        <div className={styles.sessionNotes}><MessageSquare size={14} style={{ verticalAlign: '-2px', marginRight: 6 }} />{session.notes}</div>
       )}
       {setsQuery.isPending ? (
         <div className="text-sm text-muted">Lade...</div>
@@ -92,10 +93,10 @@ function SessionDetail({ session, onEdit, onDelete, deleting }) {
 
       <div className={styles.detailActions}>
         <button className="btn btn-secondary btn-sm" onClick={onEdit}>
-          ✏️ Bearbeiten
+          <Pencil size={14} /> Bearbeiten
         </button>
         <button className="btn btn-danger btn-sm" onClick={onDelete} disabled={deleting}>
-          {deleting ? '...' : '🗑️ Löschen'}
+          {deleting ? '...' : <><Trash2 size={14} /> Löschen</>}
         </button>
       </div>
     </div>

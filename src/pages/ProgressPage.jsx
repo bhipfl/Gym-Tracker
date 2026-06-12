@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { TrendingUp } from 'lucide-react'
 import { useUsedExerciseNames, useExerciseProgress } from '../hooks/queries.js'
 import ProgressChart from '../components/ProgressChart.jsx'
 import { SkeletonCard } from '../components/Skeleton.jsx'
@@ -43,7 +44,7 @@ export default function ProgressPage() {
 
       {!selected && (
         <div className="empty-state">
-          <div className="icon">📈</div>
+          <div className="icon"><TrendingUp size={48} strokeWidth={1.5} /></div>
           <h3>Übung auswählen</h3>
           <p>Wähle eine Übung, um deine Gewichtsentwicklung zu sehen.</p>
         </div>

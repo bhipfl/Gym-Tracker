@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase.js'
+import BrandMark from '../../components/BrandMark.jsx'
 import styles from './AuthPage.module.css'
 
 // Registrierung als Coach. Kunden registrieren sich über einen Einladungslink
@@ -32,7 +33,7 @@ export default function RegisterPage({ role = 'coach', onRegistered }) {
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
-        <div className={styles.logo}>💪</div>
+        <div className={styles.logo}><BrandMark /></div>
         <h1>Gym Tracker</h1>
         <p className="text-muted text-sm">
           {role === 'coach' ? 'Coach-Konto erstellen' : 'Konto erstellen'}

@@ -5,6 +5,7 @@ import {
   usePlanExercises, useAddExerciseToPlan, useRemoveExerciseFromPlan,
   useUpdatePlanExercise, useReorderPlanExercises, useSavePlan, keys
 } from '../hooks/queries.js'
+import { ArrowLeft, Check, X, Pencil, Play, Plus, Trash2, Dumbbell, ChevronUp, ChevronDown } from 'lucide-react'
 import ExercisePicker from '../components/ExercisePicker.jsx'
 import ExerciseImage from '../components/ExerciseImage.jsx'
 import { SkeletonPage } from '../components/Skeleton.jsx'
@@ -71,7 +72,7 @@ export default function PlanDetailPage() {
   return (
     <div className="page">
       <div className={styles.header}>
-        <button className="btn btn-ghost" onClick={() => navigate('/plans')}>← Zurück</button>
+        <button className="btn btn-ghost" onClick={() => navigate('/plans')}><ArrowLeft size={16} /> Zurück</button>
 
         {editingName ? (
           <div className={styles.renameWrap}>
@@ -83,18 +84,18 @@ export default function PlanDetailPage() {
               autoFocus
               className={styles.renameInput}
             />
-            <button className="btn btn-primary btn-sm" onClick={handleRename}>✓</button>
-            <button className="btn btn-ghost btn-sm" onClick={() => { setPlanName(plan.name); setEditingName(false) }}>✕</button>
+            <button className="btn btn-primary btn-sm" onClick={handleRename} aria-label="Übernehmen"><Check size={16} /></button>
+            <button className="btn btn-ghost btn-sm" onClick={() => { setPlanName(plan.name); setEditingName(false) }} aria-label="Abbrechen"><X size={16} /></button>
           </div>
         ) : (
           <button className={styles.titleBtn} onClick={() => setEditingName(true)} title="Plan umbenennen">
             <h1 className={styles.title}>{plan.name}</h1>
-            <span className={styles.editIcon}>✏️</span>
+            <span className={styles.editIcon}><Pencil size={14} /></span>
           </button>
         )}
 
         <button className="btn btn-primary btn-sm" onClick={() => navigate(`/session/${id}`, { state: { plan } })}>
-          ▶ Start
+          <Play size={14} /> Start
         </button>
       </div>
 
@@ -102,7 +103,7 @@ export default function PlanDetailPage() {
 
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm text-muted font-bold">{exercises.length} Übung{exercises.length !== 1 ? 'en' : ''}</h2>
-        <button className="btn btn-secondary btn-sm" onClick={() => setShowPicker(true)}>+ Übung</button>
+        <button className="btn btn-secondary btn-sm" onClick={() => setShowPicker(true)}><Plus size={16} /> Übung</button>
       </div>
 
       {showPicker && (
@@ -115,7 +116,7 @@ export default function PlanDetailPage() {
 
       {exercises.length === 0 && !showPicker ? (
         <div className="empty-state">
-          <div className="icon">🏋️</div>
+          <div className="icon"><Dumbbell size={48} strokeWidth={1.5} /></div>
           <h3>Noch keine Übungen</h3>
           <p>Füge Übungen zu deinem Plan hinzu.</p>
           <button className="btn btn-primary mt-3" onClick={() => setShowPicker(true)}>Übung hinzufügen</button>
@@ -130,13 +131,13 @@ export default function PlanDetailPage() {
                   onClick={() => handleMove(i, -1)}
                   disabled={i === 0}
                   aria-label="Nach oben"
-                >▲</button>
+                ><ChevronUp size={16} /></button>
                 <button
                   className={styles.moveBtn}
                   onClick={() => handleMove(i, 1)}
                   disabled={i === exercises.length - 1}
                   aria-label="Nach unten"
-                >▼</button>
+                ><ChevronDown size={16} /></button>
               </div>
 
               <ExerciseImage name={ex.exercise_name} size={40} />
@@ -154,7 +155,7 @@ export default function PlanDetailPage() {
                     {ex.default_sets || 3} Sätze
                   </button>
                 )}
-                <button className="btn btn-ghost btn-sm" onClick={() => handleRemove(ex)}>🗑️</button>
+                <button className="btn btn-ghost btn-sm" onClick={() => handleRemove(ex)} aria-label="Übung entfernen"><Trash2 size={16} /></button>
               </div>
             </div>
           ))}
@@ -177,8 +178,8 @@ function SetsEditor({ value, onSave, onCancel }) {
         style={{ width: 56, textAlign: 'center' }}
         autoFocus
       />
-      <button className="btn btn-primary btn-sm" onClick={() => onSave(v)}>✓</button>
-      <button className="btn btn-ghost btn-sm" onClick={onCancel}>✕</button>
+      <button className="btn btn-primary btn-sm" onClick={() => onSave(v)} aria-label="Übernehmen"><Check size={16} /></button>
+      <button className="btn btn-ghost btn-sm" onClick={onCancel} aria-label="Abbrechen"><X size={16} /></button>
     </div>
   )
 }

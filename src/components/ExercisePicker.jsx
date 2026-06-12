@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { X } from 'lucide-react'
 import { searchExercises } from '../services/api.js'
 import { searchLocal, normalizeName } from '../services/exerciseDb.js'
 import styles from './ExercisePicker.module.css'
@@ -55,7 +56,7 @@ export default function ExercisePicker({ onSelect, onCancel, existingNames = [] 
     <div className={`card ${styles.picker}`}>
       <div className={styles.pickerHeader}>
         <h3>Übung hinzufügen</h3>
-        <button className="btn btn-ghost btn-sm" onClick={onCancel}>✕</button>
+        <button className="btn btn-ghost btn-sm" onClick={onCancel} aria-label="Schließen"><X size={16} /></button>
       </div>
 
       <input

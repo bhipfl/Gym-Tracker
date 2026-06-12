@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
+import { X, Pencil, Plus, Save, Flag, Dumbbell } from 'lucide-react'
 import { saveSession, updateSession, isNetworkError } from '../services/api.js'
 import { usePlanStartData, useSessionSets, useInvalidateAfterSession } from '../hooks/queries.js'
 import { addToOfflineQueue, getConfig } from '../services/storage.js'
@@ -265,11 +266,12 @@ export default function SessionPage() {
         <button
           className="btn btn-ghost"
           onClick={() => { if (confirm(editMode ? 'Bearbeitung verwerfen?' : 'Training abbrechen?')) navigate(editMode ? '/history' : '/') }}
+          aria-label="Training verlassen"
         >
-          ✕
+          <X size={20} />
         </button>
         <div className={styles.planTitle}>
-          {editMode && <span className={styles.editBadge}>✏️ </span>}
+          {editMode && <span className={styles.editBadge}><Pencil size={14} style={{ verticalAlign: '-2px' }} /> </span>}
           {plan.name}
         </div>
         <div className={styles.counter}>{doneSets}/{total}</div>
@@ -286,7 +288,7 @@ export default function SessionPage() {
 
         {exercises.length === 0 ? (
           <div className="empty-state">
-            <div className="icon">🏋️</div>
+            <div className="icon"><Dumbbell size={48} strokeWidth={1.5} /></div>
             <h3>{editMode ? 'Keine Sätze gefunden' : 'Keine Übungen im Plan'}</h3>
             {!editMode && (
               <button className="btn btn-secondary mt-3" onClick={() => navigate(`/plans/${planId}`, { state: { plan } })}>
@@ -320,7 +322,7 @@ export default function SessionPage() {
           />
         ) : (
           <button className={`btn btn-secondary btn-full ${styles.addExBtn}`} onClick={() => setShowPicker(true)}>
-            ➕ Übung hinzufügen
+            <Plus size={16} /> Übung hinzufügen
           </button>
         )}
 
@@ -351,7 +353,7 @@ export default function SessionPage() {
       {/* Sticky finish button */}
       <div className={styles.footer}>
         <button className="btn btn-primary btn-full" onClick={handleFinish} disabled={saving}>
-          {saving ? 'Speichern...' : editMode ? '💾 Änderungen speichern' : '🏁 Training beenden'}
+          {saving ? 'Speichern...' : editMode ? <><Save size={16} /> Änderungen speichern</> : <><Flag size={16} /> Training beenden</>}
         </button>
       </div>
     </div>

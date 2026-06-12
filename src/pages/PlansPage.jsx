@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ClipboardList, Play, Pencil, Trash2, Plus } from 'lucide-react'
 import { usePlans, useSavePlan, useDeletePlan } from '../hooks/queries.js'
 import PlanForm from '../components/PlanForm.jsx'
 import { SkeletonPage } from '../components/Skeleton.jsx'
@@ -34,7 +35,7 @@ export default function PlansPage() {
       <div className="page-title">
         Trainingspläne
         <button className="btn btn-primary btn-sm" onClick={() => { setEditPlan(null); setShowForm(true) }}>
-          + Neu
+          <Plus size={16} /> Neu
         </button>
       </div>
 
@@ -50,7 +51,7 @@ export default function PlansPage() {
 
       {plans.length === 0 && !showForm ? (
         <div className="empty-state">
-          <div className="icon">📋</div>
+          <div className="icon"><ClipboardList size={48} strokeWidth={1.5} /></div>
           <h3>Noch kein Plan</h3>
           <p>Erstelle deinen ersten Trainingsplan und füge Übungen hinzu.</p>
           <button className="btn btn-primary mt-3" onClick={() => setShowForm(true)}>
@@ -70,15 +71,16 @@ export default function PlansPage() {
                   className="btn btn-secondary btn-sm"
                   onClick={() => navigate(`/session/${plan.id}`, { state: { plan } })}
                 >
-                  ▶ Start
+                  <Play size={14} /> Start
                 </button>
                 <button
                   className="btn btn-ghost btn-sm"
                   onClick={() => navigate(`/plans/${plan.id}`, { state: { plan } })}
+                  aria-label="Plan bearbeiten"
                 >
-                  ✏️
+                  <Pencil size={16} />
                 </button>
-                <button className="btn btn-ghost btn-sm" onClick={() => handleDelete(plan)}>🗑️</button>
+                <button className="btn btn-ghost btn-sm" onClick={() => handleDelete(plan)} aria-label="Plan löschen"><Trash2 size={16} /></button>
               </div>
             </div>
           ))}

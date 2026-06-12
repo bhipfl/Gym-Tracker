@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
+import { User, Timer, Save, ArrowLeft } from 'lucide-react'
 import { getConfig, saveConfig } from '../services/storage.js'
 import { useAuth } from '../context/AuthContext.jsx'
+import BrandMark from '../components/BrandMark.jsx'
 import styles from './SettingsPage.module.css'
 
 export default function SettingsPage() {
@@ -31,12 +33,12 @@ export default function SettingsPage() {
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
-        <div className={styles.logo}>💪</div>
+        <div className={styles.logo}><BrandMark size={48} /></div>
         <h1>Gym Tracker</h1>
       </div>
 
       <div className="card">
-        <h3 className="mb-3">👤 Konto</h3>
+        <h3 className="mb-3 flex items-center gap-2"><User size={18} /> Konto</h3>
         <div className="form-group">
           <label className="label">Name</label>
           <div>{profile?.display_name || '–'}</div>
@@ -47,7 +49,7 @@ export default function SettingsPage() {
         </div>
         <div className="form-group">
           <label className="label">Rolle</label>
-          <span className="badge">{role === 'coach' ? '🤝 Coach' : '🏋️ Klient'}</span>
+          <span className="badge">{role === 'coach' ? 'Coach' : 'Klient'}</span>
         </div>
         <button className="btn btn-secondary w-full" onClick={handleLogout}>
           Abmelden
@@ -55,7 +57,7 @@ export default function SettingsPage() {
       </div>
 
       <div className="card mt-3">
-        <h3 className="mb-3">⏱ Training</h3>
+        <h3 className="mb-3 flex items-center gap-2"><Timer size={18} /> Training</h3>
         <div className="form-group">
           <label className="label">Pausen-Timer (Sekunden)</label>
           <input
@@ -72,12 +74,12 @@ export default function SettingsPage() {
         </div>
         {status && <div className="success-msg">{status}</div>}
         <button className="btn btn-primary btn-sm" onClick={handleSaveTraining}>
-          💾 Speichern
+          <Save size={16} /> Speichern
         </button>
       </div>
 
       <button className="btn btn-ghost btn-sm mt-3 w-full" onClick={() => navigate(-1)}>
-        ← Zurück
+        <ArrowLeft size={16} /> Zurück
       </button>
 
       <p className="text-xs text-muted mt-3" style={{ textAlign: 'center' }}>

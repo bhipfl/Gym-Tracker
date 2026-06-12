@@ -5,14 +5,15 @@ import {
   useClientPlans, useClientSessions, useClientExerciseNames, useClientProgress,
   usePlans, useAssignPlanToClient, useSessionSets,
 } from '../../hooks/queries.js'
+import { ClipboardList, Calendar, TrendingUp, ArrowLeft, X, MessageSquare, ChevronUp, ChevronDown } from 'lucide-react'
 import ProgressChart from '../../components/ProgressChart.jsx'
 import { SkeletonPage } from '../../components/Skeleton.jsx'
 import styles from './ClientDetailPage.module.css'
 
 const TABS = [
-  { id: 'akte', label: '📋 Akte' },
-  { id: 'training', label: '📅 Training' },
-  { id: 'progress', label: '📈 Fortschritt' },
+  { id: 'akte', label: 'Akte', icon: ClipboardList },
+  { id: 'training', label: 'Training', icon: Calendar },
+  { id: 'progress', label: 'Fortschritt', icon: TrendingUp },
 ]
 
 export default function ClientDetailPage() {
@@ -25,7 +26,7 @@ export default function ClientDetailPage() {
   return (
     <div className="page">
       <div className={styles.header}>
-        <button className="btn btn-ghost" onClick={() => navigate('/coach')}>← Zurück</button>
+        <button className="btn btn-ghost" onClick={() => navigate('/coach')}><ArrowLeft size={16} /> Zurück</button>
         <h1 className={styles.title}>{client.name}</h1>
       </div>
 
@@ -36,7 +37,7 @@ export default function ClientDetailPage() {
             className={`${styles.tab} ${tab === t.id ? styles.tabActive : ''}`}
             onClick={() => setTab(t.id)}
           >
-            {t.label}
+            <t.icon size={15} style={{ verticalAlign: '-2px', marginRight: 5 }} />{t.label}
           </button>
         ))}
       </div>
@@ -126,7 +127,7 @@ function AkteTab({ clientId }) {
               <div key={n.id} className={`card ${styles.noteCard}`}>
                 <div className={styles.noteHeader}>
                   <span className="text-xs text-muted">{formatDateTime(n.created_at)}</span>
-                  <button className={styles.noteDelete} onClick={() => deleteNote.mutate(n.id)} title="Notiz löschen">✕</button>
+                  <button className={styles.noteDelete} onClick={() => deleteNote.mutate(n.id)} title="Notiz löschen" aria-label="Notiz löschen"><X size={14} /></button>
                 </div>
                 <p className={styles.noteText}>{n.note}</p>
               </div>
@@ -152,7 +153,7 @@ function AssignPlanSheet({ clientId, onClose }) {
     <div className={`card ${styles.assignSheet}`}>
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-bold">Plan auswählen</h3>
-        <button className="btn btn-ghost btn-sm" onClick={onClose}>✕</button>
+        <button className="btn btn-ghost btn-sm" onClick={onClose} aria-label="Schließen"><X size={16} /></button>
       </div>
       {assignPlan.error && <div className="error-msg">{assignPlan.error.message}</div>}
       {templates.length === 0 ? (
@@ -195,7 +196,7 @@ function TrainingTab({ clientId }) {
   if (sessions.length === 0) {
     return (
       <div className="empty-state">
-        <div className="icon">📅</div>
+        <div className="icon"><Calendar size={48} strokeWidth={1.5} /></div>
         <h3>Noch kein Training</h3>
         <p>Dein Klient hat noch kein Training aufgezeichnet.</p>
       </div>
@@ -214,7 +215,7 @@ function TrainingTab({ clientId }) {
               <div className="font-bold">{session.plan_name || 'Training'}</div>
               <div className="text-xs text-muted">{formatDate(session.date)}</div>
             </div>
-            <span className="text-muted">{expanded === session.id ? '▲' : '▼'}</span>
+            <span className="text-muted">{expanded === session.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}</span>
           </button>
           {expanded === session.id && <ClientSessionSets session={session} />}
         </div>
@@ -235,7 +236,7 @@ function ClientSessionSets({ session }) {
 
   return (
     <div className={styles.sessionDetail}>
-      {session.notes && <div className={styles.sessionNotes}>💬 {session.notes}</div>}
+      {session.notes && <div className={styles.sessionNotes}><MessageSquare size={14} style={{ verticalAlign: '-2px', marginRight: 6 }} />{session.notes}</div>}
       {setsQuery.isPending ? (
         <div className="text-sm text-muted">Lade...</div>
       ) : sets.length === 0 ? (
@@ -294,7 +295,7 @@ function ProgressTab({ clientId }) {
 
       {!selected && (
         <div className="empty-state">
-          <div className="icon">📈</div>
+          <div className="icon"><TrendingUp size={48} strokeWidth={1.5} /></div>
           <h3>Übung auswählen</h3>
           <p>Wähle eine Übung, um den Fortschritt deines Klienten zu sehen.</p>
         </div>

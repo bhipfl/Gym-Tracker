@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
+import { Settings, Dumbbell, Check, CloudUpload } from 'lucide-react'
+import { useAuth } from '../context/AuthContext.jsx'
 import { usePlans, useSessions, keys } from '../hooks/queries.js'
 import { getOfflineQueue } from '../services/storage.js'
 import { syncOfflineQueue } from '../services/sync.js'
@@ -9,6 +11,7 @@ import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
   const navigate = useNavigate()
+  const { role } = useAuth()
   const qc = useQueryClient()
   const plansQuery = usePlans()
   const sessionsQuery = useSessions(5)
@@ -26,7 +29,7 @@ export default function Dashboard() {
       syncOfflineQueue().then(({ synced }) => {
         if (synced > 0) {
           setOfflineCount(getOfflineQueue().length)
-          setSyncMsg(`✅ ${synced} Training${synced > 1 ? 's' : ''} synchronisiert`)
+          setSyncMsg(`${synced} Training${synced > 1 ? 's' : ''} synchronisiert`)
           setTimeout(() => setSyncMsg(null), 4000)
           qc.invalidateQueries({ queryKey: keys.allSessions })
         }
@@ -45,10 +48,10 @@ export default function Dashboard() {
     <div className="page">
       <div className={styles.greeting}>
         <div>
-          <h1 className={styles.title}>Guten Training! 💪</h1>
+          <h1 className={styles.title}>Gutes Training!</h1>
           <p className="text-muted text-sm">{new Date().toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
         </div>
-        <button className="btn btn-ghost" onClick={() => navigate('/settings')}>⚙️</button>
+        <button className="btn btn-ghost" onClick={() => navigate('/settings')} aria-label="Einstellungen"><Settings size={20} /></button>
       </div>
 
       {error && <div className="error-msg">{error}</div>}
@@ -56,7 +59,8 @@ export default function Dashboard() {
 
       {offlineCount > 0 && (
         <div className={styles.offlineBanner}>
-          ⏳ {offlineCount} Training{offlineCount > 1 ? 's' : ''} warten auf Synchronisierung
+          <CloudUpload size={16} style={{ verticalAlign: '-3px', marginRight: 6 }} />
+          {offlineCount} Training{offlineCount > 1 ? 's' : ''} warten auf Synchronisierung
         </div>
       )}
 
@@ -67,8 +71,14 @@ export default function Dashboard() {
         </div>
         {plans.length === 0 ? (
           <div className="card text-center">
-            <p className="text-muted text-sm mb-3">Noch kein Plan angelegt.</p>
-            <button className="btn btn-primary btn-sm" onClick={() => navigate('/plans')}>Plan erstellen</button>
+            <p className="text-muted text-sm mb-3">
+              {role === 'client'
+                ? 'Dein Coach hat dir noch keinen Plan zugewiesen — du kannst auch selbst einen erstellen.'
+                : 'Noch kein Plan angelegt.'}
+            </p>
+            <button className="btn btn-primary btn-sm" onClick={() => navigate('/plans')}>
+              {role === 'client' ? 'Eigenen Plan erstellen' : 'Plan erstellen'}
+            </button>
           </div>
         ) : (
           <div className={styles.planGrid}>
@@ -78,7 +88,7 @@ export default function Dashboard() {
                 className={styles.planBtn}
                 onClick={() => navigate(`/session/${plan.id}`, { state: { plan } })}
               >
-                <span className={styles.planIcon}>🏋️</span>
+                <span className={styles.planIcon}><Dumbbell size={24} /></span>
                 <span className={styles.planName}>{plan.name}</span>
                 <span className={styles.startLabel}>Starten →</span>
               </button>
@@ -105,7 +115,7 @@ export default function Dashboard() {
                     <div className={styles.sessionPlan}>{s.plan_name || 'Training'}</div>
                     <div className="text-xs text-muted">{formatDate(s.date)}</div>
                   </div>
-                  <span className="badge">✓</span>
+                  <span className="badge"><Check size={12} strokeWidth={3} /></span>
                 </div>
               </div>
             ))}

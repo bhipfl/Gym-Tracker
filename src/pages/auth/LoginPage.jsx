@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase.js'
+import BrandMark from '../../components/BrandMark.jsx'
 import styles from './AuthPage.module.css'
 
 export default function LoginPage() {
@@ -35,7 +36,7 @@ export default function LoginPage() {
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
-        <div className={styles.logo}>💪</div>
+        <div className={styles.logo}><BrandMark /></div>
         <h1>Gym Tracker</h1>
         <p className="text-muted text-sm">Anmelden</p>
       </div>

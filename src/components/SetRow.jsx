@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react'
 import styles from './SetRow.module.css'
 
 function sanitizeDecimal(v) {
@@ -35,7 +36,7 @@ export default function SetRow({ index, set, onChange, onToggle }) {
         onClick={onToggle}
         aria-label="Satz abhaken"
       >
-        {set.done ? '✓' : ''}
+        {set.done ? <Check size={18} strokeWidth={3} /> : ''}
       </button>
     </div>
   )

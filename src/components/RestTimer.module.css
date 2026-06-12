@@ -7,13 +7,13 @@
 }
 
 .bar.done {
-  background: rgba(76, 175, 80, 0.15);
+  background: rgba(93, 202, 165, 0.15);
 }
 
 .progress {
   position: absolute;
   inset: 0 auto 0 0;
-  background: rgba(233, 69, 96, 0.18);
+  background: rgba(201, 247, 58, 0.14);
   transition: width 0.25s linear;
 }
 

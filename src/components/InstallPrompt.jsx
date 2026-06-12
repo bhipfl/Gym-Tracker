@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { X } from 'lucide-react'
+import BrandMark from './BrandMark.jsx'
 import styles from './InstallPrompt.module.css'
 
 const DISMISS_KEY = 'gtracker_install_dismissed'
@@ -77,7 +79,7 @@ export default function InstallPrompt() {
   return (
     <>
       <div className={styles.banner}>
-        <div className={styles.icon}>💪</div>
+        <div className={styles.icon}><BrandMark size={40} /></div>
         <div className={styles.text}>
           <strong>App installieren</strong>
           <span>Auf dem Startbildschirm – schneller Zugriff, Vollbild, offline.</span>
@@ -85,7 +87,7 @@ export default function InstallPrompt() {
         <button className={styles.installBtn} onClick={handleInstall}>
           Installieren
         </button>
-        <button className={styles.closeBtn} onClick={handleDismiss} aria-label="Schließen">✕</button>
+        <button className={styles.closeBtn} onClick={handleDismiss} aria-label="Schließen"><X size={16} /></button>
       </div>
 
       {showIosHelp && (
@@ -93,7 +95,7 @@ export default function InstallPrompt() {
           <div className={styles.sheet} onClick={e => e.stopPropagation()}>
             <div className={styles.sheetHeader}>
               <h3>Zum Startbildschirm hinzufügen</h3>
-              <button className={styles.closeBtn} onClick={() => setShowIosHelp(false)}>✕</button>
+              <button className={styles.closeBtn} onClick={() => setShowIosHelp(false)} aria-label="Schließen"><X size={16} /></button>
             </div>
             <ol className={styles.steps}>
               <li>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Trophy, Save, Check, ClipboardCopy } from 'lucide-react'
 import styles from './SessionSummary.module.css'
 
 function buildText(plan, date, exercises, sessionData) {
@@ -50,7 +51,9 @@ export default function SessionSummary({ plan, date, exercises, sessionData, isE
   return (
     <div className={styles.wrap}>
       <div className={styles.hero}>
-        <div className={styles.heroIcon}>{isEdit ? '💾' : '🏆'}</div>
+        <div className={styles.heroIcon} style={{ color: 'var(--accent)' }}>
+          {isEdit ? <Save size={56} strokeWidth={1.5} /> : <Trophy size={56} strokeWidth={1.5} />}
+        </div>
         <h1>{isEdit ? 'Änderungen gespeichert!' : 'Training abgeschlossen!'}</h1>
         <p className="text-muted text-sm">
           {plan.name}
@@ -62,7 +65,7 @@ export default function SessionSummary({ plan, date, exercises, sessionData, isE
         <div className={styles.summaryHeader}>
           <h2>Zusammenfassung</h2>
           <button className={`btn btn-primary btn-sm ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-            {copied ? '✓ Kopiert!' : '📋 Kopieren'}
+            {copied ? <><Check size={14} /> Kopiert!</> : <><ClipboardCopy size={14} /> Kopieren</>}
           </button>
         </div>
         <pre className={styles.text}>{text || 'Keine Sätze abgehakt.'}</pre>

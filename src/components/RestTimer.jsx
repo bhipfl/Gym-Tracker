@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Timer, X } from 'lucide-react'
 import { buzz } from '../utils/haptics.js'
 import styles from './RestTimer.module.css'
 
@@ -36,13 +37,16 @@ export default function RestTimer({ endsAt, totalMs, onExtend, onSkip, onFinishe
     <div className={`${styles.bar} ${done ? styles.done : ''}`}>
       <div className={styles.progress} style={{ width: `${fraction * 100}%` }} />
       <div className={styles.content}>
-        <span className={styles.label}>{done ? 'Pause vorbei 💪' : '⏱ Pause'}</span>
+        <span className={styles.label}>
+          <Timer size={16} style={{ verticalAlign: '-3px', marginRight: 5 }} />
+          {done ? 'Pause vorbei!' : 'Pause'}
+        </span>
         {!done && <span className={styles.time}>{mm}:{ss}</span>}
         <div className={styles.actions}>
           {!done && (
             <button className={styles.timerBtn} onClick={onExtend}>+30s</button>
           )}
-          <button className={styles.timerBtn} onClick={onSkip}>{done ? '✕' : 'Skip'}</button>
+          <button className={styles.timerBtn} onClick={onSkip} aria-label={done ? 'Schließen' : 'Pause überspringen'}>{done ? <X size={14} /> : 'Skip'}</button>
         </div>
       </div>
     </div>

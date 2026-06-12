@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext.jsx'
 import { acceptInvitation } from '../../services/api.js'
 import { supabase } from '../../lib/supabase.js'
 import RegisterPage from './RegisterPage.jsx'
+import BrandMark from '../../components/BrandMark.jsx'
 import styles from './AuthPage.module.css'
 
 // Einladungslink des Coaches: /#/invite/<code>
@@ -51,7 +52,7 @@ export default function InvitePage() {
     return (
       <div className={styles.wrap}>
         <div className={styles.header}>
-          <div className={styles.logo}>🤝</div>
+          <div className={styles.logo}><BrandMark /></div>
           <h1>Coach-Einladung</h1>
           <p className="text-muted text-sm">Du wurdest eingeladen, einem Coach beizutreten.</p>
         </div>
@@ -78,7 +79,7 @@ export default function InvitePage() {
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
-        <div className={styles.logo}>🤝</div>
+        <div className={styles.logo}><BrandMark /></div>
         <h1>Coach-Einladung</h1>
         <p className="text-muted text-sm">Anmelden und Einladung annehmen</p>
       </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Users, Plus, Check, Link2, Trash2 } from 'lucide-react'
 import { useClients, useOpenInvitations, useCreateInvitation, useDeleteInvitation } from '../../hooks/queries.js'
 import { SkeletonPage } from '../../components/Skeleton.jsx'
 import styles from './CoachDashboard.module.css'
@@ -47,7 +48,7 @@ export default function CoachDashboard() {
           onClick={() => createInvitation.mutate(null)}
           disabled={createInvitation.isPending}
         >
-          {createInvitation.isPending ? '...' : '+ Einladen'}
+          {createInvitation.isPending ? '...' : <><Plus size={16} /> Einladen</>}
         </button>
       </div>
 
@@ -65,9 +66,9 @@ export default function CoachDashboard() {
                 </div>
                 <div className="flex gap-2">
                   <button className="btn btn-secondary btn-sm" onClick={() => handleCopy(inv.code)}>
-                    {copied === inv.code ? '✓ Kopiert' : '🔗 Link'}
+                    {copied === inv.code ? <><Check size={14} /> Kopiert</> : <><Link2 size={14} /> Link</>}
                   </button>
-                  <button className="btn btn-ghost btn-sm" onClick={() => deleteInvitation.mutate(inv.id)}>🗑️</button>
+                  <button className="btn btn-ghost btn-sm" onClick={() => deleteInvitation.mutate(inv.id)} aria-label="Einladung löschen"><Trash2 size={16} /></button>
                 </div>
               </div>
             ))}
@@ -77,7 +78,7 @@ export default function CoachDashboard() {
 
       {clients.length === 0 ? (
         <div className="empty-state">
-          <div className="icon">🤝</div>
+          <div className="icon"><Users size={48} strokeWidth={1.5} /></div>
           <h3>Noch keine Klienten</h3>
           <p>Erstelle eine Einladung und schicke den Link an deinen Klienten.</p>
           <button
