@@ -1,9 +1,9 @@
-import { X, Check, Plus, Minus, RotateCcw } from 'lucide-react'
+import { X, Plus, Minus, RotateCcw } from 'lucide-react'
 import SetRow from './SetRow.jsx'
 import ExerciseImage from './ExerciseImage.jsx'
 import styles from './ActiveExercise.module.css'
 
-export default function ActiveExercise({ exercise, sets, hasLastWeights, onChange, onToggle, onAddSet, onRemoveSet, onFillLast, onRemoveExercise }) {
+export default function ActiveExercise({ exercise, sets, lastSets, hasLastWeights, onChange, onToggle, onAddSet, onRemoveSet, onFillLast, onRemoveExercise }) {
   const doneSets = sets.filter(s => s.done).length
   const allDone = sets.length > 0 && doneSets === sets.length
 
@@ -30,21 +30,21 @@ export default function ActiveExercise({ exercise, sets, hasLastWeights, onChang
         </div>
       </div>
 
-      <div className={styles.labels}>
-        <span>Satz</span>
-        <span>Gewicht (kg)</span>
-        <span>Wdh</span>
-        <span><Check size={13} aria-label="abgehakt" /></span>
-      </div>
-
       <div className={styles.sets}>
         {sets.map((set, i) => (
           <SetRow
             key={i}
             index={i}
             set={set}
+            last={lastSets?.[i + 1]}
             onChange={(field, val) => onChange(i, field, val)}
             onToggle={() => onToggle(i)}
+            onFillSet={() => {
+              const l = lastSets?.[i + 1]
+              if (!l) return
+              if (l.weight != null) onChange(i, 'weight', String(l.weight))
+              if (l.reps != null) onChange(i, 'reps', String(l.reps))
+            }}
           />
         ))}
       </div>

@@ -302,6 +302,7 @@ export default function SessionPage() {
               key={ex.id}
               exercise={ex}
               sets={sessionData[ex.id] || []}
+              lastSets={editMode ? null : lastWeights[ex.exercise_name]}
               hasLastWeights={!editMode && !!lastWeights[ex.exercise_name]}
               onChange={(setIdx, field, val) => handleSetChange(ex.id, setIdx, field, val)}
               onToggle={(setIdx) => handleSetToggle(ex.id, setIdx)}
