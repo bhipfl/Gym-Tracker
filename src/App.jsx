@@ -26,10 +26,9 @@ function RequireAuth({ children }) {
   return children
 }
 
-// Startseite je nach Rolle: Coach → Klientenübersicht, Klient → Dashboard
+// Startseite ist für alle das Trainings-Dashboard (Solo-tauglich).
+// Coaches erreichen ihre Klientenübersicht über den „Klienten"-Tab.
 function Home() {
-  const { role } = useAuth()
-  if (role === 'coach') return <Navigate to="/coach" replace />
   return <Dashboard />
 }
 

@@ -1,0 +1,16 @@
+[
+  { "name": "Bankdrücken", "wgerId": 73, "_match": "Bankdrücken LH" },
+  { "name": "Schrägbank Maschine", "wgerId": 539, "_match": "Schrägbankdrücken MP" },
+  { "name": "Schulterdrücken Kurzhantel", "wgerId": 567, "_match": "Schulterdrücken KH" },
+  { "name": "Butterfly Kabelzug", "wgerId": 1922, "_match": "Butterfly am Kabelzug" },
+  { "name": "Seitheben Maschine", "wgerId": 348, "_match": "Seitheben KH (kein Maschinen-Eintrag)" },
+  { "name": "Trizeps Cable Pushdown", "wgerId": 659, "_match": "Trizeps Seildrücken" },
+  { "name": "Single Arm Triceps Pushdown", "wgerId": 659, "_match": "Trizeps Seildrücken (kein einarmiger Eintrag)" },
+  { "name": "Bulgarian Split Squats", "wgerId": 988, "_match": "Bulgarische geteilte Kniebeugen links" },
+  { "name": "Beinstrecker Maschine", "wgerId": 851, "_match": "Beinstrecker" },
+  { "name": "Rudern eng", "wgerId": 512, "_match": "Rudern Sitzend, Eng" },
+  { "name": "Rudern breit", "wgerId": 513, "_match": "T-Bar Rudern (breit)" },
+  { "name": "Reverse Flys", "wgerId": 84, "_match": "Rudern Vorgebeugt LH Reverse" },
+  { "name": "Bizeps Curls stehend", "wgerId": 92, "_match": "Bizeps KH-Curls" },
+  { "name": "Beinbeuger isoliert", "wgerId": 365, "_match": "Beinbeuger Liegend (kein sitzender Eintrag)" }
+]

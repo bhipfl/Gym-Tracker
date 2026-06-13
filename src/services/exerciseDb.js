@@ -2,6 +2,7 @@
 // Wird lazy als eigener Chunk geladen, damit der Entry-Bundle klein bleibt.
 
 let dbPromise = null
+let aliasPromise = null
 let index = null
 
 export function loadExerciseDb() {
@@ -11,6 +12,18 @@ export function loadExerciseDb() {
       .catch(() => [])
   }
   return dbPromise
+}
+
+// Eigene/migrierte Übungsnamen → wger-Eintrag (per wgerId). Lässt Bilder auch
+// für Namen erscheinen, die nicht exakt dem Katalog entsprechen. Siehe
+// src/data/exerciseAliases.de.json.
+function loadAliases() {
+  if (!aliasPromise) {
+    aliasPromise = import('../data/exerciseAliases.de.json')
+      .then((m) => m.default || [])
+      .catch(() => [])
+  }
+  return aliasPromise
 }
 
 export function normalizeName(name) {
@@ -27,7 +40,7 @@ export function normalizeName(name) {
 
 async function getIndex() {
   if (index) return index
-  const db = await loadExerciseDb()
+  const [db, aliases] = await Promise.all([loadExerciseDb(), loadAliases()])
   index = new Map()
   for (const ex of db) {
     index.set(normalizeName(ex.name), ex)
@@ -35,6 +48,13 @@ async function getIndex() {
       const key = normalizeName(alias)
       if (!index.has(key)) index.set(key, ex)
     }
+  }
+  // Kuratierte Aliase (eigene/migrierte Namen → Katalog-Eintrag per wgerId).
+  // Überschreiben bewusst, damit ein gepflegter Match Vorrang vor Zufallstreffern hat.
+  const byWgerId = new Map(db.map((ex) => [ex.id, ex]))
+  for (const a of aliases) {
+    const entry = byWgerId.get(a.wgerId)
+    if (entry) index.set(normalizeName(a.name), entry)
   }
   return index
 }

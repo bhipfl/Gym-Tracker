@@ -11,11 +11,14 @@ const clientNav = [
   { to: '/settings', label: 'Profil', icon: Settings },
 ]
 
+// Coach-Nav ist trainings-first (wie beim Klienten) + Klienten-Zugang.
+// Profil/Settings ist über das Zahnrad im Dashboard-Header erreichbar.
 const coachNav = [
-  { to: '/coach', label: 'Klienten', icon: Users },
+  { to: '/', label: 'Home', icon: Home },
   { to: '/plans', label: 'Pläne', icon: ClipboardList },
   { to: '/history', label: 'Verlauf', icon: History },
-  { to: '/settings', label: 'Profil', icon: Settings },
+  { to: '/progress', label: 'Fortschritt', icon: TrendingUp },
+  { to: '/coach', label: 'Klienten', icon: Users },
 ]
 
 export default function Layout() {
