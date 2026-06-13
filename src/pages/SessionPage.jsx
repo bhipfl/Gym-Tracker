@@ -253,6 +253,7 @@ export default function SessionPage() {
         date={sessionDate}
         exercises={exercises}
         sessionData={sessionData}
+        lastWeights={editMode ? {} : lastWeights}
         isEdit={editMode}
         onClose={() => navigate(editMode ? '/history' : '/')}
       />
